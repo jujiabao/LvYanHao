@@ -53,7 +53,7 @@ public class DummyContent {
         String content = "null";
         String filmNa = "大闹天竺" + position;
         String filmLv = "4.6";
-        String filmInfo = "宝强取真经，争当搞笑King";
+        String filmInfo = "宝强取真经，争当搞笑King.....";
         String filmPlayTm = "2017-01-28 本周六上映";
         return new DummyItem(id, content, filmId, filmNa, filmLv, filmInfo, filmPlayTm, makeDetails(position));
     }
