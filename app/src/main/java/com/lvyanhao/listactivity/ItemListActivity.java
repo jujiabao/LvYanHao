@@ -92,7 +92,7 @@ public class ItemListActivity extends AppCompatActivity {
         private final List<DummyContent.DummyItem> mValues;
 
         //最大显示数，要比每页显示条数多1
-        private int max_count = 11;
+        private int max_count = 2;
 
         //是否添加了FootView
         private Boolean isFootView = false;
