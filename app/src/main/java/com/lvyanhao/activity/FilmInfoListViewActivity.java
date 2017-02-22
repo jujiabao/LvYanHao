@@ -11,18 +11,22 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.lvyanhao.R;
-import com.lvyanhao.component.MyAdapter;
-import com.lvyanhao.component.MyListener;
+import com.lvyanhao.component.MyFilmInfoListViewAdapter;
+import com.lvyanhao.component.MyFilmInfoListViewListener;
 import com.lvyanhao.pullableview.PullToRefreshLayout;
+import com.lvyanhao.vo.FilmListInfoVo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-public class PullableListViewActivity extends Activity
+public class FilmInfoListViewActivity extends Activity
 {
 	private ListView listView;
 	private PullToRefreshLayout ptrl;
 	private boolean isFirstIn = true;
+
+	public List<FilmListInfoVo> items;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -30,7 +34,7 @@ public class PullableListViewActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_listview);
 		ptrl = ((PullToRefreshLayout) findViewById(R.id.refresh_view));
-		ptrl.setOnRefreshListener(new MyListener());
+		ptrl.setOnRefreshListener(new MyFilmInfoListViewListener());
 		listView = (ListView) findViewById(R.id.content_view);
 		initListView();
 	}
@@ -52,12 +56,19 @@ public class PullableListViewActivity extends Activity
 	 */
 	private void initListView()
 	{
-		List<String> items = new ArrayList<String>();
-		for (int i = 0; i < 30; i++)
-		{
-			items.add("这里是item " + i);
+		items = new ArrayList<FilmListInfoVo>();
+		for (int i = 0; i < 30; i++) {
+//			items.add("这里是item " + i);
+			FilmListInfoVo filmListInfoVo = new FilmListInfoVo(i);
+			filmListInfoVo.setFid(UUID.randomUUID().toString());
+			filmListInfoVo.setFilmName("大闹天竺"+i);
+			filmListInfoVo.setFilmPosterUrl("http://localhost:8080/FilmSystem/getPic.do");
+			filmListInfoVo.setFilmLevel("7.9");
+			filmListInfoVo.setFilmSimpleInfo("宝强大傻逼"+i);
+			filmListInfoVo.setFilmOpenTime("2017年02月22日");
+			items.add(filmListInfoVo);
 		}
-		MyAdapter adapter = new MyAdapter(this, items);
+		MyFilmInfoListViewAdapter adapter = new MyFilmInfoListViewAdapter(this, items);
 		listView.setAdapter(adapter);
 		listView.setOnItemLongClickListener(new OnItemLongClickListener()
 		{
@@ -67,7 +78,7 @@ public class PullableListViewActivity extends Activity
 					int position, long id)
 			{
 				Toast.makeText(
-						PullableListViewActivity.this,
+						FilmInfoListViewActivity.this,
 						"LongClick on "
 								+ parent.getAdapter().getItemId(position),
 						Toast.LENGTH_SHORT).show();
@@ -81,7 +92,8 @@ public class PullableListViewActivity extends Activity
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id)
 			{
-				Toast.makeText(PullableListViewActivity.this,
+				Log.d("jujiabao", "当前itemId="+parent.getAdapter().getItemId(position));
+				Toast.makeText(FilmInfoListViewActivity.this,
 						" Click on " + parent.getAdapter().getItemId(position),
 						Toast.LENGTH_SHORT).show();
 			}

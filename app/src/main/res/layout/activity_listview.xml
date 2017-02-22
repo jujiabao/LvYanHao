@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        android:divider="@color/gray"
+        android:divider="@color/divide_color"
         android:dividerHeight="1dp" />
 
     <include layout="@layout/load_more" />

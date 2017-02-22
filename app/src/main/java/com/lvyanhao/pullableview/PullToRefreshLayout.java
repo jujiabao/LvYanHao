@@ -278,6 +278,7 @@ public class PullToRefreshLayout extends RelativeLayout
 			loadStateImageView.setVisibility(View.VISIBLE);
 			loadStateTextView.setText(R.string.load_succeed);
 			loadStateImageView.setBackgroundResource(R.drawable.load_succeed);
+
 			break;
 		case FAIL:
 		default:
@@ -351,6 +352,7 @@ public class PullToRefreshLayout extends RelativeLayout
 			break;
 		case DONE:
 			// 刷新或加载完毕，啥都不做
+			Log.d("jujiabao", "加载完毕！");
 			break;
 		}
 	}

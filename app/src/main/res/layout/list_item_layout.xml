@@ -1,16 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:minHeight="60dp" >
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:descendantFocusability="blocksDescendants">
 
-    <TextView
-        android:id="@+id/tv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:textColor="@color/black"
-        android:textSize="16sp" />
+    <ImageView
+        android:id="@+id/mimage"
+        android:layout_width="250px"
+        android:layout_height="250px"
+        android:layout_margin="@dimen/listview_image_margin"
+        android:background="@drawable/test_image"
+        />
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- 电影名 -->
+        <TextView
+            android:id="@+id/filmna"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/listview_detail_margin"
+            android:textSize="@dimen/listview_detail_tile_font_size"
+            android:textStyle="bold"
+            android:textAppearance="?attr/textAppearanceListItem" />
+
+        <!-- 观众平均评分 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/content1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/listview_detail_margin"
+                android:layout_marginBottom="@dimen/listview_detail_margin"
+                android:text="@string/grade"
+                android:textSize="@dimen/listview_detail_font_size"
+                android:textAppearance="?attr/textAppearanceListItem" />
+
+            <TextView
+                android:id="@+id/filmlv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/listview_detail_margin"
+                android:layout_marginBottom="@dimen/listview_detail_margin"
+                android:textColor="@color/colorGrade"
+                android:textAppearance="?attr/textAppearanceListItem" />
+
+        </LinearLayout>
+
+        <!-- 影片介绍 -->
+        <TextView
+            android:id="@+id/filminfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/listview_detail_margin"
+            android:layout_marginBottom="@dimen/listview_detail_margin"
+            android:textSize="@dimen/listview_detail_font_size"
+            android:textAppearance="?attr/textAppearanceListItem" />
+
+        <!-- 开映时间 -->
+        <TextView
+            android:id="@+id/filmplaytime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/listview_detail_margin"
+            android:layout_marginBottom="@dimen/listview_detail_margin"
+            android:textSize="@dimen/listview_detail_font_size"
+            android:textAppearance="?attr/textAppearanceListItem" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="right">
+
+        <!-- 评分+点评 -->
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="评价"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

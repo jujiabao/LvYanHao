@@ -9,6 +9,15 @@
         <item name="android:listDivider">@drawable/divider</item>
     </style>
 
+    <style name="MyTitle" parent="android:Theme">
+        <item name="android:windowTitleSize">60dp</item>
+        <item name="android:windowTitleBackgroundStyle">@style/WindowTitleBackground</item>
+    </style>
+
+    <style name="WindowTitleBackground">
+        <item name="android:background">@color/low_red</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/activity/PullableListViewActivity.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/component/MyAdapter.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/component/MyListener.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/activity/FilmInfoListViewActivity.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/component/MyFilmInfoListViewAdapter.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/component/MyFilmInfoListViewListener.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/dummy/DummyContent.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/fragment/ItemsDivider.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/listactivity/ItemListActivity.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/pullableview/PullToRefreshLayout.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/pullableview/Pullable.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/pullableview/PullableListView.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/utils/JSONUtil.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/anim" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/load_failed.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/load_succeed.png" charset="UTF-8" />
