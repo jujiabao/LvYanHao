@@ -535,6 +535,7 @@ public class PullToRefreshLayout extends RelativeLayout
 			changeState(REFRESHING);
 			// Ë¢ÐÂ²Ù×÷
 			if (mListener != null)
+
 				mListener.onRefresh(PullToRefreshLayout.this);
 			hide();
 		}

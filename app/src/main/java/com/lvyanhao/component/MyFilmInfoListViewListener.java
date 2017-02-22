@@ -40,6 +40,10 @@ public class MyFilmInfoListViewListener implements PullToRefreshLayout.OnRefresh
 			{
 				// 千万别忘了告诉控件加载完毕了哦！
 				pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
+				/**
+				 * 以下如何添加上拉加载的数据
+				 */
+
 			}
 		}.sendEmptyMessageDelayed(0, 1000);
 	}
