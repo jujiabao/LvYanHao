@@ -5,13 +5,18 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +37,8 @@ import org.json.JSONException;
 import java.lang.reflect.Type;
 
 import static android.R.attr.data;
+import static android.R.attr.key;
+import static android.R.attr.logo;
 
 public class LoginActivity extends Activity {
 
@@ -40,6 +47,8 @@ public class LoginActivity extends Activity {
     private EditText editId;
 
     private EditText editPwd;
+
+    private ImageView logoImageView;
 
     private MyAsyncTask myAsyncTask;
 
@@ -60,6 +69,7 @@ public class LoginActivity extends Activity {
         btnLogin = (Button) findViewById(R.id.login_btnLogin);
         editId = (EditText) findViewById(R.id.login_edtId);
         editPwd = (EditText) findViewById(R.id.login_edtPwd);
+        logoImageView = (ImageView) findViewById(R.id.set_net_btn);
     }
 
     private void myListener(){
@@ -70,6 +80,68 @@ public class LoginActivity extends Activity {
                 myAsyncTask = new MyAsyncTask(LoginActivity.this);
                 myAsyncTask.execute();
                 Log.d("lvyanhao", "<====点击登陆按钮成功");
+            }
+        });
+
+        logoImageView.setOnClickListener(new OnClickListener() {
+            long[] mHints = new long[3];//初始全部为0
+            private LinearLayout layout;
+            private Button confirm;
+            private Button cancel;
+            private EditText ipEdt;
+            private EditText portEdt;
+            private SharedPreferences userSettings;
+            private SharedPreferences.Editor editor;
+
+            @Override
+            public void onClick(View view) {
+                layout = (LinearLayout) findViewById(R.id.set_net);
+                confirm = (Button) findViewById(R.id.set_net_confirm);
+                cancel = (Button) findViewById(R.id.set_net_cancel);
+                ipEdt = (EditText) findViewById(R.id.ip);
+                portEdt = (EditText) findViewById(R.id.port);
+
+                //存储设置
+                userSettings = getSharedPreferences("setting_net", MODE_PRIVATE);
+                editor = userSettings.edit();
+
+                //将mHints数组内的所有元素左移一个位置
+                System.arraycopy(mHints, 1, mHints, 0, mHints.length - 1);
+                //获得当前系统已经启动的时间
+                mHints[mHints.length - 1] = SystemClock.uptimeMillis();
+                if(SystemClock.uptimeMillis()-mHints[0]<=500) {
+                    layout.setVisibility(View.VISIBLE);
+                    SharedPreferences settings= getSharedPreferences("setting_net", 0);
+                    String ip = settings.getString("ip","192.168.1.106");
+                    int port = settings.getInt("port", 8888);
+                    ipEdt.setText(ip);
+                    portEdt.setText(port+"");
+                }
+
+                cancel.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        layout.setVisibility(View.GONE);
+                    }
+                });
+
+                confirm.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            String ip = ipEdt.getText().toString();
+                            String port = portEdt.getText().toString();
+                            editor.putString("ip", ip);
+                            editor.putInt("port", Integer.parseInt(port));
+                            editor.commit();
+                            Log.d("lvyanhao", "@ ip="+ip+",port="+port);
+                            Toast.makeText(getApplicationContext(), "保存网络配置成功！", Toast.LENGTH_SHORT).show();
+                            layout.setVisibility(View.GONE);
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), "保存网络配置失败！", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         });
     }
@@ -119,7 +191,7 @@ public class LoginActivity extends Activity {
             Log.d("lvyanhao", "@ 拼包信息 UserLoginReqVo="+reqVo);
             //写json
             Gson gson = new Gson();
-            String rsp = NetUtil.post("/user/login.do", gson.toJson(reqVo), "1234567890");
+            String rsp = NetUtil.post(mContext, "/user/login.do", gson.toJson(reqVo), "1234567890");
             Log.d("lvyanhao", "@ 服务器返回信息："+rsp);
             UserLoginRspVo rspVo = null;
             try {
@@ -174,4 +246,5 @@ public class LoginActivity extends Activity {
         }
 
     };
+
 }
