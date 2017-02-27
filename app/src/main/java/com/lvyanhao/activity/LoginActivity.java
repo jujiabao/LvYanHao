@@ -77,7 +77,8 @@ public class LoginActivity extends Activity {
         private ProgressDialog dialog = null;
         private Context context;
 
-        private String msg = null;
+        //返回报文头部分
+        private ResultDto resultDto = null;
 
         public MyAsyncTask(Context context) {
             this.context = context;
@@ -116,23 +117,34 @@ public class LoginActivity extends Activity {
             reqVo.setUpwd(MD5Util.getMD5Code(password));
             reqVo.setImei(new SystemUtil(mContext).getIMEI());
             Log.d("lvyanhao", "@ 拼包信息 UserLoginReqVo="+reqVo);
+            //写json
             Gson gson = new Gson();
-            String rsp = NetUtil.post("/user/login.do", gson.toJson(reqVo));
+            String rsp = NetUtil.post("/user/login.do", gson.toJson(reqVo), "1234567890");
             Log.d("lvyanhao", "@ 服务器返回信息："+rsp);
-            Gson rspGson = new Gson();
-            ResultDto resultDto = rspGson.fromJson(rsp, ResultDto.class);
-            String status = resultDto.getStatus();
-            msg = resultDto.getMsg();
-            Log.d("lvyanhao", "@ 拆包明细："+ status + "，" + msg);
-            Type t = new TypeToken<UserLoginRspVo>(){}.getType();
-            String data = rspGson.toJson(resultDto.getData());
-            Log.d("lvyanhao", "@ data="+data);
-            UserLoginRspVo rspVo = rspGson.fromJson(data, t);
+            UserLoginRspVo rspVo = null;
+            try {
+                resultDto = gson.fromJson(rsp, ResultDto.class);
+                Log.d("lvyanhao", "@ 拆包明细："+ resultDto.getStatus() + "，" + resultDto.getMsg());
+                //拆包返回的
+                Type t = new TypeToken<UserLoginRspVo>(){}.getType();
+                //发送请求
+                String data = gson.toJson(resultDto.getData());
+                Log.d("lvyanhao", "@ 返回报文体：data="+data);
+                rspVo = gson.fromJson(data, t);
+            } catch (Exception e) {
+                Toast.makeText(context, "错误信息："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
             Log.d("lvyanhao", "@ 报文体明细："+rspVo);
-            flag = Integer.parseInt(status);
+            if (resultDto == null) {
+                resultDto = new ResultDto();
+                resultDto.setStatus("-1");
+                resultDto.setMsg("系统未知错误！");
+                resultDto.setData(null);
+            }
+            flag = Integer.parseInt(resultDto.getStatus());
             publishProgress(flag);
             return null;
-
         }
 
         @Override
@@ -141,17 +153,17 @@ public class LoginActivity extends Activity {
             dialog.dismiss();// 关闭ProgressDialog
             switch (values[0]) {
                 case 0:
-                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, resultDto.getMsg(), Toast.LENGTH_SHORT).show();
                     Log.d("lvyanhao", "跳转成功！");
                     Intent intent = new Intent(LoginActivity.this,FilmInfoListViewActivity.class);
                     startActivity(intent);
-                    finish();
+//                    finish();
                     break;
                 case 99999:
                     Toast.makeText(context, "连接网络错误！", Toast.LENGTH_SHORT).show();
                     break;
                 default:
-                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, resultDto.getMsg(), Toast.LENGTH_SHORT).show();
                     break;
             }
         }

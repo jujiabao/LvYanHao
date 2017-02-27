@@ -16,7 +16,7 @@ import java.util.Map;
 public class NetUtil {
     private static final String PROTOCOL = "http://";
 
-    private static final String IP = "192.168.1.106";
+    private static final String IP = "10.128.195.134";
 
     private static final int PORT = 8888;
 
@@ -25,6 +25,10 @@ public class NetUtil {
     private static final String REQUEST_URL = PROTOCOL + IP + ":" + PORT + "/" + SERVER_NAME;
 
     private static final String CONTENT_TYPE = "application/json";
+
+    private static final String TOKEN_NAME = "token";
+
+    private static final String REQUEST_FAILED_JSON = "{\"status\":\"99999\",\"msg\":\"请求网络失败！\",\"data\":null}";
 
     /**
      * 向指定URL发送POST方法的请求
@@ -35,7 +39,7 @@ public class NetUtil {
      *            请求参数，请求参数应该是name1=value1&name2=value2的形式。
      * @return URL所代表远程资源的响应
      */
-    public static String post(String transCode, String params) {
+    public static String post(String transCode, String params, String tokenValue) {
         PrintWriter out = null;
         BufferedReader in = null;
         String result = "";
@@ -48,9 +52,9 @@ public class NetUtil {
             conn.setConnectTimeout(10000);
             conn.setRequestProperty("accept", "*/*");
             conn.setRequestProperty("connection", "Keep-Alive");
-            conn.setRequestProperty("user-agent",
-                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)");
+            conn.setRequestProperty("user-agent","Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)");
             conn.setRequestProperty("Content-Type", NetUtil.CONTENT_TYPE);
+            conn.setRequestProperty(NetUtil.TOKEN_NAME, tokenValue);
             // 发送POST请求必须设置如下两行
             conn.setDoOutput(true);
             conn.setDoInput(true);
@@ -70,6 +74,7 @@ public class NetUtil {
         } catch (Exception e) {
             System.out.println("发送POST请求出现异常！" + e);
             e.printStackTrace();
+            return REQUEST_FAILED_JSON;
         }
         // 使用finally块来关闭输出流、输入流
         finally {
@@ -127,6 +132,7 @@ public class NetUtil {
             System.out.println("发送GET请求出现异常！" + e);
             result = "发送GET请求出现异常！";
             e.printStackTrace();
+            return REQUEST_FAILED_JSON;
         }
         // 使用finally块来关闭输入流
         finally {
