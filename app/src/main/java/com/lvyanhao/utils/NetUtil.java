@@ -34,6 +34,12 @@ public class NetUtil {
 
     private static final String REQUEST_FAILED_JSON = "{\"status\":\"99999\",\"msg\":\"请求网络失败！\",\"data\":null}";
 
+    private static final String JSESSION_NAME="JSESSIONID";
+
+    private static String JSESSION_VALUE = null;
+
+    public static String TOKEN_VALUE = null;
+
     /**
      * 向指定URL发送POST方法的请求
      *
@@ -70,6 +76,9 @@ public class NetUtil {
             conn.setRequestProperty("connection", "Keep-Alive");
             conn.setRequestProperty("user-agent","Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)");
             conn.setRequestProperty("Content-Type", NetUtil.CONTENT_TYPE);
+            if (JSESSION_VALUE != null) {
+                conn.setRequestProperty("cookie", JSESSION_NAME+"="+JSESSION_VALUE);
+            }
             conn.setRequestProperty(NetUtil.TOKEN_NAME, tokenValue);
             // 发送POST请求必须设置如下两行
             conn.setDoOutput(true);
@@ -87,6 +96,32 @@ public class NetUtil {
             while ((line = in.readLine()) != null) {
                 result += "\n" + line;
             }
+            //获取响应头信息
+            Map<String, List<String>> map = conn.getHeaderFields();
+            if (map.containsKey("Set-Cookie")) {
+                List<String> values = map.get("Set-Cookie");
+                if (values != null && !values.isEmpty()) {
+                    for (String s:values) {
+                        if (s.startsWith("JSESSIONID=")) {
+                            JSESSION_VALUE = s.replaceAll("JSESSIONID=","");
+                        } else {
+                            int start = s.indexOf("JSESSIONID=");
+                            if (start >= 0) {
+                                s = s.substring(start + 11);
+                                int end = s.indexOf(";");
+                                if (end >=0) {
+                                    JSESSION_VALUE = s.substring(0, end);
+                                }
+                            }
+                        }
+                    }
+                }
+                Log.d("jujiabao", "JSESSION_VALUE="+JSESSION_VALUE);
+            }
+            if (map.containsKey(TOKEN_NAME)) {
+                TOKEN_VALUE = map.get(TOKEN_NAME).get(0);
+            }
+            Log.d("jujiabao", "响应头："+map.toString());
         } catch (Exception e) {
             System.out.println("发送POST请求出现异常！" + e);
             e.printStackTrace();
@@ -142,12 +177,12 @@ public class NetUtil {
                     "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)");
             // 建立实际的连接
             conn.connect();
-            // 获取所有响应头字段
+            /*// 获取所有响应头字段
             Map<String, List<String>> map = conn.getHeaderFields();
             // 遍历所有的响应头字段
             for (String key : map.keySet()) {
                 System.out.println(key + "--->" + map.get(key));
-            }
+            }*/
             // 定义BufferedReader输入流来读取URL的响应
             in = new BufferedReader(
                     new InputStreamReader(conn.getInputStream()));
@@ -155,6 +190,32 @@ public class NetUtil {
             while ((line = in.readLine()) != null) {
                 result += "\n" + line;
             }
+            //获取响应头信息
+            Map<String, List<String>> map = conn.getHeaderFields();
+            if (map.containsKey("Set-Cookie")) {
+                List<String> values = map.get("Set-Cookie");
+                if (values != null && !values.isEmpty()) {
+                    for (String s:values) {
+                        if (s.startsWith("JSESSIONID=")) {
+                            JSESSION_VALUE = s.replaceAll("JSESSIONID=","");
+                        } else {
+                            int start = s.indexOf("JSESSIONID=");
+                            if (start >= 0) {
+                                s = s.substring(start + 11);
+                                int end = s.indexOf(";");
+                                if (end >=0) {
+                                    JSESSION_VALUE = s.substring(0, end);
+                                }
+                            }
+                        }
+                    }
+                }
+                Log.d("jujiabao", "JSESSION_VALUE="+JSESSION_VALUE);
+            }
+            if (map.containsKey(TOKEN_NAME)) {
+                TOKEN_VALUE = map.get(TOKEN_NAME).get(0);
+            }
+            Log.d("jujiabao", "响应头："+map.toString());
         } catch (Exception e) {
             System.out.println("发送GET请求出现异常！" + e);
             result = "发送GET请求出现异常！";
