@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -56,11 +57,17 @@ public class LoginActivity extends Activity {
 
     private boolean flag = true;
 
+    private TextView registTV;
+
+    private TextView findpwdTV;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         init();
+        registListener();
+        forgotListener();
         myListener();
     }
 
@@ -70,6 +77,32 @@ public class LoginActivity extends Activity {
         editId = (EditText) findViewById(R.id.login_edtId);
         editPwd = (EditText) findViewById(R.id.login_edtPwd);
         logoImageView = (ImageView) findViewById(R.id.set_net_btn);
+        registTV = (TextView)findViewById(R.id.login_txtRegister);
+        findpwdTV = (TextView)findViewById(R.id.login_txtForgotPwd);
+    }
+
+    private void registListener(){
+        registTV.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("lvyanhao","====>点击用户注册按钮");
+                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
+                startActivity(intent);
+                Log.d("lvyanhao","<====点击用户注册按钮成功");
+            }
+        });
+    }
+
+    private void forgotListener(){
+        findpwdTV.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("lvyanhao","====>点击忘记密码按钮");
+                Intent intent = new Intent(LoginActivity.this,ForgotPwdActivity.class);
+                startActivity(intent);
+                Log.d("lvyanhao","<====点击忘记密码成功");
+            }
+        });
     }
 
     private void myListener(){
@@ -77,8 +110,12 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Log.d("lvyanhao", "====>点击登陆按钮");
-                myAsyncTask = new MyAsyncTask(LoginActivity.this);
-                myAsyncTask.execute();
+                if (!"".equals(editId.getText().toString()) && !"".equals(editPwd.getText().toString())) {
+                    myAsyncTask = new MyAsyncTask(LoginActivity.this);
+                    myAsyncTask.execute();
+                } else {
+                    Toast.makeText(LoginActivity.this, "请输入用户或密码！", Toast.LENGTH_SHORT).show();
+                }
                 Log.d("lvyanhao", "<====点击登陆按钮成功");
             }
         });
@@ -214,36 +251,36 @@ public class LoginActivity extends Activity {
                 resultDto.setMsg("系统未知错误！");
                 resultDto.setData(null);
             }
-            flag = Integer.parseInt(resultDto.getStatus());
-            publishProgress(flag);
-            return null;
-        }
+        flag = Integer.parseInt(resultDto.getStatus());
+        publishProgress(flag);
+        return null;
+    }
 
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-            dialog.dismiss();// 关闭ProgressDialog
-            switch (values[0]) {
-                case 0:
-                    Toast.makeText(context, resultDto.getMsg(), Toast.LENGTH_SHORT).show();
-                    Log.d("lvyanhao", "跳转成功！");
-                    Intent intent = new Intent(LoginActivity.this,FilmInfoListViewActivity.class);
-                    startActivity(intent);
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+        super.onProgressUpdate(values);
+        dialog.dismiss();// 关闭ProgressDialog
+        switch (values[0]) {
+            case 0:
+                Toast.makeText(context, resultDto.getMsg(), Toast.LENGTH_SHORT).show();
+                Log.d("lvyanhao", "跳转成功！");
+                Intent intent = new Intent(LoginActivity.this,FilmInfoListViewActivity.class);
+                startActivity(intent);
 //                    finish();
-                    break;
-                case 99999:
-                    Toast.makeText(context, "连接网络错误！", Toast.LENGTH_SHORT).show();
-                    break;
-                default:
-                    Toast.makeText(context, resultDto.getMsg(), Toast.LENGTH_SHORT).show();
-                    break;
-            }
+                break;
+            case 99999:
+                Toast.makeText(context, "连接网络错误！", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Toast.makeText(context, resultDto.getMsg(), Toast.LENGTH_SHORT).show();
+                break;
         }
+    }
 
-        @Override
-        protected void onCancelled(Void result) {
-            super.onCancelled(result);
-        }
+    @Override
+    protected void onCancelled(Void result) {
+        super.onCancelled(result);
+    }
 
     };
 

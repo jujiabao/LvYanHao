@@ -20,6 +20,15 @@
         <activity android:name=".activity.FilmInfoListViewActivity"
             android:label="@string/app_name">
         </activity>
+        <activity android:name=".activity.RegisterActivity"
+            android:label="@string/register">
+        </activity>
+        <activity android:name=".activity.ForgotPwdActivity"
+            android:label="@string/findpwd">
+        </activity>
+        <activity android:name=".activity.VerifyRgcodeActivity"
+            android:label="@string/register">
+        </activity>
         <!--<activity-->
             <!--android:name=".listactivity.ItemDetailActivity"-->
             <!--android:label="@string/title_item_detail"-->

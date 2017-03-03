@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="网络基本设置："
-        android:textSize="20dp"/>
+        android:textSize="15dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
             android:layout_width="80sp"
             android:layout_height="wrap_content"
             android:text="IP："
-            android:textSize="20dp"/>
+            android:textSize="15dp"/>
         <EditText
             android:id="@+id/ip"
             android:layout_width="match_parent"
@@ -45,7 +45,7 @@
             android:layout_width="80sp"
             android:layout_height="wrap_content"
             android:text="PORT："
-            android:textSize="20dp"/>
+            android:textSize="15dp"/>
         <EditText
             android:id="@+id/port"
             android:layout_width="match_parent"
@@ -65,13 +65,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="confirm"
-            android:textSize="25dp"/>
+            android:textSize="15dp"/>
         <Button
             android:id="@+id/set_net_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="cancel"
-            android:textSize="25dp"/>
+            android:textSize="15dp"/>
     </LinearLayout>
 
 </LinearLayout>
