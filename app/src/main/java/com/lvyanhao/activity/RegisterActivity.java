@@ -178,7 +178,7 @@ public class RegisterActivity extends Activity{
                     intent.setClass(RegisterActivity.this, VerifyRgcodeActivity.class);
                     startActivity(intent);
 
-//                    finish();
+                    finish();
                     break;
                 case 99999:
                     Toast.makeText(context, "Á¬½ÓÍøÂç´íÎó£¡", Toast.LENGTH_SHORT).show();

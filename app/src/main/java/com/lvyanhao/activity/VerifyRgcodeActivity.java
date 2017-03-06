@@ -50,6 +50,8 @@ public class VerifyRgcodeActivity extends Activity{
 
     private MyAsyncTask myAsyncTask;
 
+    private Bundle bundle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,15 +69,15 @@ public class VerifyRgcodeActivity extends Activity{
         vmobile = (TextView) findViewById(R.id.verify_edtTel);
         vcode = (EditText)findViewById(R.id.verify_edtCode);
 
-        Bundle bundle = this.getIntent().getExtras();
+        bundle = this.getIntent().getExtras();
         String name = bundle.getString("suname");
-        vname.setText(name);
+        vname.setText("用户名："+name);
         String nick = bundle.getString("snick");
-        vnick.setText("昵称:"+nick);
+        vnick.setText("昵称："+nick);
         String email = bundle.getString("semail");
-        vemail.setText(email);
+        vemail.setText("邮箱："+email);
         String mobile = bundle.getString("smobile");
-        vmobile.setText("手机号:"+mobile);
+        vmobile.setText("手机号："+mobile);
     }
 
 
@@ -95,7 +97,6 @@ public class VerifyRgcodeActivity extends Activity{
     class MyAsyncTask extends AsyncTask<Void, Integer, Void> {
         private ProgressDialog dialog = null;
         private Context context;
-        private Bundle bundle;
         //返回报文头部分
         private ResultDto resultDto = null;
 
@@ -128,8 +129,8 @@ public class VerifyRgcodeActivity extends Activity{
         @Override
         protected Void doInBackground(Void... arg0) {
             int flag = 99999;
-            String fmaile = vemail.getText().toString();
-            String fname = vname.getText().toString();
+            String fname = bundle.getString("suname");
+            String fmaile = bundle.getString("semail");
             String fcode = vcode.getText().toString();
 
             Log.d("lvyanhao", "@ 取得用户输入数据：code="+vcode+"name="+vname+"maile+"+vemail);
@@ -138,7 +139,7 @@ public class VerifyRgcodeActivity extends Activity{
             reqVo.setVmail(fmaile);
             reqVo.setVname(fname);
             reqVo.setVcode(fcode);
-            Log.d("lvyanhao", "@ 拼包信息 UserSignupReqVo="+reqVo);
+            Log.d("lvyanhao", "@ 拼包信息 UserVerifyMailReqVo="+reqVo);
             //写json
             Gson gson = new Gson();
             String rsp = NetUtil.post(mContext, "/user/vm.do", gson.toJson(reqVo), "1234567890");
@@ -164,13 +165,7 @@ public class VerifyRgcodeActivity extends Activity{
                 resultDto.setMsg("系统未知错误！");
                 resultDto.setData(null);
             }
-            if (rspVo != null) {
-                bundle = new Bundle();
-                bundle.putString("suname", rspVo.getSuname());
-                bundle.putString("snick", rspVo.getSnick());
-                bundle.putString("semail", rspVo.getSemail());
-                bundle.putString("smobile", rspVo.getSmobile());
-            }
+
             flag = Integer.parseInt(resultDto.getStatus());
             publishProgress(flag);
             return null;
@@ -188,7 +183,7 @@ public class VerifyRgcodeActivity extends Activity{
                     intent.setClass(VerifyRgcodeActivity.this, LoginActivity.class);
                     startActivity(intent);
 
-//                    finish();
+                    finish();
                     break;
                 case 99999:
                     Toast.makeText(context, "连接网络错误！", Toast.LENGTH_SHORT).show();

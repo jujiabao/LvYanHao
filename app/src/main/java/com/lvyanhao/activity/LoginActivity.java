@@ -264,7 +264,7 @@ public class LoginActivity extends Activity {
             case 0:
                 Toast.makeText(context, resultDto.getMsg(), Toast.LENGTH_SHORT).show();
                 Log.d("lvyanhao", "Ìø×ª³É¹¦£¡");
-                Intent intent = new Intent(LoginActivity.this,FilmInfoListViewActivity.class);
+                Intent intent = new Intent(LoginActivity.this,FragmentActivity.class);
                 startActivity(intent);
 //                    finish();
                 break;
