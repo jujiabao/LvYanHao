@@ -99,7 +99,7 @@ public class FragmentActivity extends Activity implements View.OnClickListener {
             case 0:
                 // 当点击了首页tab时，改变控件的图片和文字颜色
                 mainImage.setImageResource(R.drawable.fragmeng_main);
-                mainText.setTextColor(Color.WHITE);
+                mainText.setTextColor(Color.RED);
                 if (mainFragment == null) {
                     // 如果MessageFragment为空，则创建一个并添加到界面上
                     mainFragment = new MainFragment();
@@ -112,7 +112,7 @@ public class FragmentActivity extends Activity implements View.OnClickListener {
             case 1:
                 // 当点击了热点tab时，改变控件的图片和文字颜色
                 hotImage.setImageResource(R.drawable.fragment_hot);
-                hotText.setTextColor(Color.WHITE);
+                hotText.setTextColor(Color.RED);
                 if (hotFragment == null) {
                     // 如果ContactsFragment为空，则创建一个并添加到界面上
                     hotFragment = new HotFragment();
@@ -125,7 +125,7 @@ public class FragmentActivity extends Activity implements View.OnClickListener {
             case 2:
                 // 当点击了个人tab时，改变控件的图片和文字颜色
                 mineImage.setImageResource(R.drawable.fragment_mine);
-                mineText.setTextColor(Color.WHITE);
+                mineText.setTextColor(Color.RED);
                 if (mineFragment == null) {
                     // 如果NewsFragment为空，则创建一个并添加到界面上
                     mineFragment = new MineFragment();
@@ -140,12 +140,12 @@ public class FragmentActivity extends Activity implements View.OnClickListener {
     }
 
     private void clearSelection() {
-        mainImage.setImageResource(R.drawable.unfragment_hot);
-        mainText.setTextColor(Color.parseColor("#000000"));
+        mainImage.setImageResource(R.drawable.unfragment_main);
+        mainText.setTextColor(Color.parseColor("#D0D0D0"));
         hotImage.setImageResource(R.drawable.unfragment_hot);
-        hotText.setTextColor(Color.parseColor("#000000"));
-        mineImage.setImageResource(R.drawable.unfragment_hot);
-        mineText.setTextColor(Color.parseColor("#000000"));
+        hotText.setTextColor(Color.parseColor("#D0D0D0"));
+        mineImage.setImageResource(R.drawable.unfragemnt_mine);
+        mineText.setTextColor(Color.parseColor("#D0D0D0"));
     }
     private void hideFragments(FragmentTransaction transaction) {
        if (mainFragment != null) {

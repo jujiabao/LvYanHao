@@ -2,7 +2,11 @@ package com.lvyanhao.fragment;
 
 import android.annotation.TargetApi;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,12 +19,25 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lvyanhao.R;
 import com.lvyanhao.activity.FilmInfoListViewActivity;
+import com.lvyanhao.activity.FragmentActivity;
+import com.lvyanhao.activity.LoginActivity;
 import com.lvyanhao.component.MyFilmInfoListViewAdapter;
+import com.lvyanhao.dto.ResultDto;
 import com.lvyanhao.pullableview.PullToRefreshLayout;
+import com.lvyanhao.utils.MD5Util;
+import com.lvyanhao.utils.NetUtil;
+import com.lvyanhao.utils.SystemUtil;
 import com.lvyanhao.vo.FilmListInfoVo;
+import com.lvyanhao.vo.FilmListRefreshReqVo;
+import com.lvyanhao.vo.FilmListRefreshRspVo;
+import com.lvyanhao.vo.UserLoginReqVo;
+import com.lvyanhao.vo.UserLoginRspVo;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -33,11 +50,16 @@ public class MainFragment extends Fragment {
 
     private ListView listView;
     private PullToRefreshLayout ptrl;
-    private boolean isFirstIn = true;
+    private PullToRefreshLayout myPullToRefreshLayout;
+    private FilmListRefreshReqVo reqVo;
+    private FilmListRefreshRspVo rspVo;
+    private List<FilmListRefreshRspVo> rspVosList;
+   // private boolean isFirstIn = true;
+    private MyAsyncTask myAsyncTask;
 
     private Context mContext;
 
-    List<FilmListInfoVo> items;
+    List<FilmListRefreshRspVo> items;
     MyFilmInfoListViewAdapter adapter;
 
 
@@ -56,7 +78,7 @@ public class MainFragment extends Fragment {
 
     private void initListView()
     {
-        items = new ArrayList<FilmListInfoVo>();
+        /**items = new ArrayList<FilmListRefreshRspVo>();
         for (int i = 0; i < 1; i++) {
 //			items.add("这里是item " + i);
             FilmListInfoVo filmListInfoVo = new FilmListInfoVo(i);
@@ -69,7 +91,7 @@ public class MainFragment extends Fragment {
             items.add(filmListInfoVo);
         }
         adapter = new MyFilmInfoListViewAdapter(mContext, items);
-        listView.setAdapter(adapter);
+        listView.setAdapter(adapter);**/
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
         {
 
@@ -77,10 +99,11 @@ public class MainFragment extends Fragment {
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id)
             {
+                rspVo = (FilmListRefreshRspVo) parent.getAdapter().getItem(position);
                 Toast.makeText(
                         mContext,
                         "LongClick on "
-                                + parent.getAdapter().getItemId(position),
+                                + rspVo.getFid(),
                         Toast.LENGTH_SHORT).show();
                 return true;
             }
@@ -105,7 +128,7 @@ public class MainFragment extends Fragment {
         @Override
         public void onRefresh(final PullToRefreshLayout pullToRefreshLayout) {
             // 下拉刷新操作
-            new Handler()
+            /**new Handler()
             {
                 @Override
                 public void handleMessage(Message msg)
@@ -115,7 +138,7 @@ public class MainFragment extends Fragment {
                     for (int i = 0; i < 2; i++) {
                         FilmListInfoVo filmListInfoVo = new FilmListInfoVo(i);
                         filmListInfoVo.setFid(UUID.randomUUID().toString());
-                        filmListInfoVo.setFilmName(UUID.randomUUID().toString());
+                        filmListInfoVo.setFilmName(UUID.randomUUID().toString().substring(0,6));
                         filmListInfoVo.setFilmPosterUrl("http://localhost:8080/FilmSystem/getPic.do");
                         filmListInfoVo.setFilmLevel("7.9");
                         filmListInfoVo.setFilmSimpleInfo("大傻逼"+i);
@@ -124,12 +147,16 @@ public class MainFragment extends Fragment {
                     }
                     adapter = new MyFilmInfoListViewAdapter(mContext, items);
                     listView.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
-
+            adapter.notifyDataSetChanged();
                     // 千万别忘了告诉控件刷新完毕了哦！
                     pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
                 }
-            }.sendEmptyMessageDelayed(0, 5000);
+            }.sendEmptyMessageDelayed(0, 5000);**/
+            Log.d("lvyanhao", "开启线程----");
+            myPullToRefreshLayout = pullToRefreshLayout;
+            myAsyncTask = new MyAsyncTask(mContext);
+            myAsyncTask.execute();
+            Log.d("lvyanhao", "线程end");
         }
 
         @Override
@@ -137,19 +164,17 @@ public class MainFragment extends Fragment {
             /**
              * 这边需要请求网络
              */
-            new Handler()
+            /**new Handler()
             {
                 @Override
                 public void handleMessage(Message msg)
                 {
 
-                    /**
-                     * 以下如何添加上拉加载的数据
-                     */
+
                     for (int i = 0; i < 2; i++) {
                         FilmListInfoVo filmListInfoVo = new FilmListInfoVo(i);
                         filmListInfoVo.setFid(UUID.randomUUID().toString());
-                        filmListInfoVo.setFilmName(UUID.randomUUID().toString());
+                        filmListInfoVo.setFilmName(UUID.randomUUID().toString().substring(0,6));
                         filmListInfoVo.setFilmPosterUrl("http://localhost:8080/FilmSystem/getPic.do");
                         filmListInfoVo.setFilmLevel("7.9");
                         filmListInfoVo.setFilmSimpleInfo("大傻逼"+i);
@@ -164,7 +189,113 @@ public class MainFragment extends Fragment {
                     pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
 
                 }
-            }.sendEmptyMessageDelayed(0, 1000);
+            }.sendEmptyMessageDelayed(0, 5000);**/
         }
     }
+
+    class MyAsyncTask extends AsyncTask<Void, Integer, Void> {
+        private ProgressDialog dialog = null;
+        private Context context;
+
+        //返回报文头部分
+        private ResultDto resultDto = null;
+
+        public MyAsyncTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            /*dialog = ProgressDialog.show(context, null, "正在登录，请稍后...", false);
+            dialog.setCancelable(true);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    try {
+                        cancel(true);//取消所有的操作
+                        //主动抛出异常
+                        throw new RuntimeException("用户主动取消请求");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });*/
+        }
+
+        @SuppressWarnings("WrongThread")
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            int flag = 99999;
+            FilmListRefreshReqVo reqVo = new FilmListRefreshReqVo();
+            reqVo.setFlimit("5");
+            Log.d("lvyanhao", "@ 拼包信息 FilmListRefreshReqVo="+reqVo);
+            //写json
+            Gson gson = new Gson();
+            Log.d("lvyanhao", "@ 发往服务器信息："+gson.toJson(reqVo));
+//            String rsp = NetUtil.post(mContext, "/user/login.do", gson.toJson(reqVo), "1234567890");
+            String rsp = "{\"status\":\"0\",\"msg\":\"加载成功!\",\"data\":[{\"fid\":\"e0a29c46fd8611e6b9a99de9b5cfef3f\",\"fna\":\"美女与野兽\",\"fgrade\":null,\"fseio\":\"童话永经典，公主美流传\",\"fontm\":\"2017-03-17大陆上映\",\"fpicurl\":\"/film/post/default.jpg\"},{\"fid\":\"e0a2683efd8611e6b9a99de9b5cfef3f\",\"fna\":\"速度与激情8\",\"fgrade\":null,\"fseio\":\"车子又飚起，王者要归来\",\"fontm\":\"2017-04大陆上映\",\"fpicurl\":\"/film/post/default.jpg\"},{\"fid\":\"7563e300fd8511e6b9a99de9b5cfef3f\",\"fna\":\"一条狗的使命\",\"fgrade\":\"10.0\",\"fseio\":\"狗狗爱主人，重生不分离\",\"fontm\":\"2017-03-03大陆上映\",\"fpicurl\":\"/film/post/default.jpg\"},{\"fid\":\"7563ad40fd8511e6b9a99de9b5cfef3f\",\"fna\":\"爱乐之城\",\"fgrade\":null,\"fseio\":\"爵士钢琴家，恋爱舞天涯\",\"fontm\":\"2017-02-14大陆上映\",\"fpicurl\":\"/film/post/default.jpg\"},{\"fid\":\"d74784e2fd8411e6b9a99de9b5cfef3f\",\"fna\":\"乘风破浪\",\"fgrade\":null,\"fseio\":\"阿浪梦追逐，意外入险途\",\"fontm\":\"2017-01-28大陆上映\",\"fpicurl\":\"/film/post/default.jpg\"}]}";
+            Log.d("lvyanhao", "@ 服务器返回信息："+rsp);
+
+            List<FilmListRefreshRspVo> rspVos = null;
+            try {
+                resultDto = gson.fromJson(rsp, ResultDto.class);
+                Log.d("lvyanhao", "@ 拆包明细："+ resultDto.getStatus() + "，" + resultDto.getMsg());
+                //拆包返回的
+                Type t = new TypeToken<List<FilmListRefreshRspVo>>(){}.getType();
+                //发送请求
+                String data = gson.toJson(resultDto.getData());
+                Log.d("lvyanhao", "@ 返回报文体：data="+data);
+                rspVos = gson.fromJson(data, t);
+                rspVosList = rspVos;
+            } catch (Exception e) {
+                Toast.makeText(context, "错误信息："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+            Log.d("lvyanhao", "@ 报文体明细："+rspVos);
+            if (resultDto == null) {
+                resultDto = new ResultDto();
+                resultDto.setStatus("-1");
+                resultDto.setMsg("系统未知错误！");
+                resultDto.setData(null);
+            }
+            flag = Integer.parseInt(resultDto.getStatus());
+            publishProgress(flag);
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+//            dialog.dismiss();// 关闭ProgressDialog
+            switch (values[0]) {
+                case 0:
+                    adapter = new MyFilmInfoListViewAdapter(mContext, rspVosList);
+                    listView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                    myPullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+                    break;
+                case 99999:
+                    Toast.makeText(context, "连接网络错误！", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Toast.makeText(context, resultDto.getMsg(), Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+
+        @Override
+        protected void onCancelled(Void result) {
+            super.onCancelled(result);
+        }
+
+    };
+
 }

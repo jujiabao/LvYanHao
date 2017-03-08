@@ -11,5 +11,6 @@
     <color name="low_red">#6593cb</color>
     <color name="low_dark">#F6F6F6</color>
     <color name="divide_color">#ECECEC</color>
+    <color name="whitesmoke">#F5F5F5</color>
 
 </resources>

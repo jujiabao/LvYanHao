@@ -24,7 +24,7 @@ import java.util.UUID;
 
 public class FilmInfoListViewActivity extends Activity
 {
-	private ListView listView;
+	/*private ListView listView;
 	private PullToRefreshLayout ptrl;
 	private boolean isFirstIn = true;
 
@@ -54,9 +54,9 @@ public class FilmInfoListViewActivity extends Activity
 		}
 	}
 
-	/**
+	*//**
 	 * ListView初始化方法
-	 */
+	 *//*
 	private void initListView()
 	{
 		items = new ArrayList<FilmListInfoVo>();
@@ -118,7 +118,7 @@ public class FilmInfoListViewActivity extends Activity
 					for (int i = 0; i < 2; i++) {
 						FilmListInfoVo filmListInfoVo = new FilmListInfoVo(i);
 						filmListInfoVo.setFid(UUID.randomUUID().toString());
-						filmListInfoVo.setFilmName(UUID.randomUUID().toString());
+						filmListInfoVo.setFilmName("藏進空"+i);
 						filmListInfoVo.setFilmPosterUrl("http://localhost:8080/FilmSystem/getPic.do");
 						filmListInfoVo.setFilmLevel("7.9");
 						filmListInfoVo.setFilmSimpleInfo("大傻逼"+i);
@@ -137,22 +137,22 @@ public class FilmInfoListViewActivity extends Activity
 
 		@Override
 		public void onLoadMore(final PullToRefreshLayout pullToRefreshLayout) {
-			/**
+			*//**
 			 * 这边需要请求网络
-			 */
+			 *//*
 			new Handler()
 			{
 				@Override
 				public void handleMessage(Message msg)
 				{
 
-					/**
+					*//**
 					 * 以下如何添加上拉加载的数据
-					 */
+					 *//*
 					for (int i = 0; i < 2; i++) {
 						FilmListInfoVo filmListInfoVo = new FilmListInfoVo(i);
 						filmListInfoVo.setFid(UUID.randomUUID().toString());
-						filmListInfoVo.setFilmName(UUID.randomUUID().toString());
+						filmListInfoVo.setFilmName("大鬧天空"+i);
 						filmListInfoVo.setFilmPosterUrl("http://localhost:8080/FilmSystem/getPic.do");
 						filmListInfoVo.setFilmLevel("7.9");
 						filmListInfoVo.setFilmSimpleInfo("大傻逼"+i);
@@ -169,5 +169,5 @@ public class FilmInfoListViewActivity extends Activity
 				}
 			}.sendEmptyMessageDelayed(0, 1000);
 		}
-	}
+	}*/
 }

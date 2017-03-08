@@ -9,14 +9,15 @@ import android.widget.TextView;
 
 import com.lvyanhao.R;
 import com.lvyanhao.vo.FilmListInfoVo;
+import com.lvyanhao.vo.FilmListRefreshRspVo;
 
 import java.util.List;
 
 public class MyFilmInfoListViewAdapter extends BaseAdapter {
-	List<FilmListInfoVo> items;
+	List<FilmListRefreshRspVo> items;
 	Context context;
 
-	public MyFilmInfoListViewAdapter(Context context, List<FilmListInfoVo> items) {
+	public MyFilmInfoListViewAdapter(Context context, List<FilmListRefreshRspVo> items) {
 		this.context = context;
 		this.items = items;
 	}
@@ -42,16 +43,16 @@ public class MyFilmInfoListViewAdapter extends BaseAdapter {
 				R.layout.list_item_layout, null);
 		TextView filmnaTv = (TextView) view.findViewById(R.id.filmna);
 //		tv.setText(items.get(position));
-		filmnaTv.setText(items.get(position).getFilmName());
+		filmnaTv.setText(items.get(position).getFna());
 
 		TextView filmLvTv = (TextView) view.findViewById(R.id.filmlv);
-		filmLvTv.setText(items.get(position).getFilmLevel());
+		filmLvTv.setText(items.get(position).getFgrade());
 
 		TextView filmIntroduceTv = (TextView) view.findViewById(R.id.filminfo);
-		filmIntroduceTv.setText(items.get(position).getFilmSimpleInfo());
+		filmIntroduceTv.setText(items.get(position).getFseio());
 
 		TextView filmOpenTv = (TextView) view.findViewById(R.id.filmplaytime);
-		filmOpenTv.setText(items.get(position).getFilmOpenTime());
+		filmOpenTv.setText(items.get(position).getFontm());
 
 		return view;
 	}

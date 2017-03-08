@@ -26,7 +26,7 @@ public class MyFilmInfoListViewListener implements PullToRefreshLayout.OnRefresh
 				// 千万别忘了告诉控件刷新完毕了哦！
 				pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
 			}
-		}.sendEmptyMessageDelayed(0, 1000);
+		}.sendEmptyMessageDelayed(0, 5000);
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class MyFilmInfoListViewListener implements PullToRefreshLayout.OnRefresh
 				 */
 
 			}
-		}.sendEmptyMessageDelayed(0, 1000);
+		}.sendEmptyMessageDelayed(0, 5000);
 	}
 
 }
