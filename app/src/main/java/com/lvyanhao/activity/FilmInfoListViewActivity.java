@@ -1,26 +1,6 @@
 package com.lvyanhao.activity;
 
 import android.app.Activity;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ListView;
-import android.widget.Toast;
-
-import com.lvyanhao.R;
-import com.lvyanhao.component.MyFilmInfoListViewAdapter;
-import com.lvyanhao.component.MyFilmInfoListViewListener;
-import com.lvyanhao.pullableview.PullToRefreshLayout;
-import com.lvyanhao.vo.FilmListInfoVo;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class FilmInfoListViewActivity extends Activity
 {

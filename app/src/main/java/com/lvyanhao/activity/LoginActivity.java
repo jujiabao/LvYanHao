@@ -61,6 +61,9 @@ public class LoginActivity extends Activity {
 
     private TextView findpwdTV;
 
+    private SharedPreferences tokenSp;
+    private SharedPreferences.Editor tokenSpEditor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,7 +132,6 @@ public class LoginActivity extends Activity {
             private EditText portEdt;
             private SharedPreferences userSettings;
             private SharedPreferences.Editor editor;
-
             @Override
             public void onClick(View view) {
                 layout = (LinearLayout) findViewById(R.id.set_net);
@@ -250,6 +252,16 @@ public class LoginActivity extends Activity {
                 resultDto.setStatus("-1");
                 resultDto.setMsg("系统未知错误！");
                 resultDto.setData(null);
+            }
+            if (rspVo != null) {
+                String token = rspVo.getToken();
+                if (token != null && !"".equals(token)) {
+                    tokenSp = getSharedPreferences("TOKEN",MODE_PRIVATE);
+                    tokenSpEditor = tokenSp.edit();
+                    tokenSpEditor.putString("token", token);
+                    tokenSpEditor.commit();
+                    Log.d("lvyanhao", "@ 取得token值，token="+token+"，放入SharedPreferences成功！");
+                }
             }
         flag = Integer.parseInt(resultDto.getStatus());
         publishProgress(flag);

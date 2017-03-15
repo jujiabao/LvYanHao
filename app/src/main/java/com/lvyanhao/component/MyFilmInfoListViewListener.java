@@ -1,15 +1,9 @@
 package com.lvyanhao.component;
 
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 
 import com.lvyanhao.pullableview.PullToRefreshLayout;
-import com.lvyanhao.vo.FilmListInfoVo;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class MyFilmInfoListViewListener implements PullToRefreshLayout.OnRefreshListener
 {

@@ -68,7 +68,7 @@ public class VerifyFindPwdActivity extends Activity{
         bundle = this.getIntent().getExtras();
         String name = bundle.getString("funame");
         vname.setText("”√ªß√˚£∫"+name);
-        String email = bundle.getString("semail");
+        String email = bundle.getString("femail");
         vemail.setText("” œ‰£∫"+email);
     }
 

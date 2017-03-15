@@ -1,29 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true"
+    >
+
+
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView android:id="@+id/iv_blur"
+        <ImageView
+            android:id="@+id/iv_blur"
             android:layout_width="match_parent"
             android:layout_height="250dp" />
 
-        <ImageView android:id="@+id/iv_filmpost"
+        <ImageView
+            android:id="@+id/iv_filmpost"
             android:layout_width="120dp"
             android:layout_height="170dp"
+            android:layout_alignParentLeft="true"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_alignParentLeft="true"/>
+            android:layout_marginTop="10dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/iv_filmpost"
             android:layout_marginLeft="6dp"
             android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/iv_filmpost"
             android:orientation="vertical">
 
             <!-- 电影名 -->
@@ -32,23 +43,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/listview_detail_margin"
-                android:textSize="@dimen/listview_detail_tile_font_size"
-                android:textStyle="bold"
-                android:textColor="@color/white"
+                android:text="生化危机"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:text="生化危机"/>
+                android:textColor="@color/white"
+                android:textSize="@dimen/listview_detail_tile_font_size"
+                android:textStyle="bold" />
 
             <!-- 英文名 -->
             <TextView
                 android:id="@+id/filmena"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/listview_detail_margin"
                 android:layout_marginBottom="@dimen/listview_detail_margin"
-                android:textSize="@dimen/listview_detail_font_size"
+                android:layout_marginLeft="@dimen/listview_detail_margin"
+                android:text="asd"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textColor="@color/white"
-                android:text="asd"/>
+                android:textSize="@dimen/listview_detail_font_size" />
 
             <!-- 观众平均评分 -->
             <LinearLayout
@@ -60,34 +71,34 @@
                     android:id="@+id/content1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/listview_detail_margin"
                     android:layout_marginBottom="@dimen/listview_detail_margin"
-                    android:textColor="@color/whitesmoke"
+                    android:layout_marginLeft="@dimen/listview_detail_margin"
                     android:text="@string/grade"
-                    android:textSize="@dimen/listview_detail_font_size"
-                    android:textAppearance="?attr/textAppearanceListItem" />
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="@color/whitesmoke"
+                    android:textSize="@dimen/listview_detail_font_size" />
 
                 <TextView
                     android:id="@+id/filmlv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/listview_detail_margin"
                     android:layout_marginBottom="@dimen/listview_detail_margin"
-                    android:textColor="@color/colorGrade"
-                    android:textSize="@dimen/listview_grade_font_size"
+                    android:layout_marginLeft="@dimen/listview_detail_margin"
+                    android:text="10"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    android:text="10"/>
+                    android:textColor="@color/colorGrade"
+                    android:textSize="@dimen/listview_grade_font_size" />
 
                 <TextView
                     android:id="@+id/filmcount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/listview_detail_margin"
                     android:layout_marginBottom="@dimen/listview_detail_margin"
-                    android:textSize="30px"
+                    android:layout_marginLeft="@dimen/listview_detail_margin"
+                    android:text="10人"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textColor="@color/whitesmoke"
-                    android:text="10人"/>
+                    android:textSize="30px" />
 
             </LinearLayout>
 
@@ -96,113 +107,118 @@
                 android:id="@+id/filmtp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/listview_detail_margin"
                 android:layout_marginBottom="@dimen/listview_detail_margin"
-                android:textSize="@dimen/listview_detail_font_size"
+                android:layout_marginLeft="@dimen/listview_detail_margin"
+                android:text="喜剧"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textColor="@color/whitesmoke"
-                android:text="喜剧"/>
+                android:textSize="@dimen/listview_detail_font_size" />
 
             <!-- 地区 -->
             <TextView
                 android:id="@+id/filmarea"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/listview_detail_margin"
                 android:layout_marginBottom="@dimen/listview_detail_margin"
-                android:textSize="@dimen/listview_detail_font_size"
+                android:layout_marginLeft="@dimen/listview_detail_margin"
+                android:text="美国"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textColor="@color/whitesmoke"
-                android:text="美国"/>
+                android:textSize="@dimen/listview_detail_font_size" />
 
             <!-- 影片时长 -->
             <TextView
                 android:id="@+id/filmtm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/listview_detail_margin"
                 android:layout_marginBottom="@dimen/listview_detail_margin"
-                android:textSize="@dimen/listview_detail_font_size"
+                android:layout_marginLeft="@dimen/listview_detail_margin"
+                android:text="123分钟"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textColor="@color/whitesmoke"
-                android:text="123分钟"/>
+                android:textSize="@dimen/listview_detail_font_size" />
 
             <!-- 开映时间 -->
             <TextView
                 android:id="@+id/filmplaytime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/listview_detail_margin"
                 android:layout_marginBottom="@dimen/listview_detail_margin"
-                android:textSize="@dimen/listview_detail_font_size"
+                android:layout_marginLeft="@dimen/listview_detail_margin"
+                android:text="22222"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textColor="@color/whitesmoke"
-                android:text="22222"/>
+                android:textSize="@dimen/listview_detail_font_size" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_below="@+id/iv_filmpost">
+            android:layout_below="@+id/iv_filmpost"
+            android:layout_marginTop="15dp">
+
             <Button
                 android:id="@+id/btn_store"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/button_style"
-                android:textColor="@color/white"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:text="收藏"/>
+                android:layout_weight="1"
+                android:background="@drawable/button_style"
+                android:text="收藏"
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/btn_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/button_style"
-                android:textColor="@color/white"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:text="评价"/>
+                android:layout_weight="1"
+                android:background="@drawable/button_style"
+                android:text="评价"
+                android:textColor="@color/white" />
         </LinearLayout>
 
     </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white">
+
         <TextView
-            android:id="@+id/content"
+            android:id="@+id/film_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLines="3"
-            android:textColor="@color/black"
             android:layout_marginLeft="6dp"
-            android:layout_marginTop="10dp"
             android:layout_marginRight="6dp"
-            android:lineSpacingExtra="5dp"
+            android:layout_marginTop="10dp"
             android:ellipsize="end"
+            android:lineSpacingExtra="5dp"
+            android:maxLines="3"
             android:text="接过自己用生命换来的二百块钱，林逸最想骂的就是，妈拉个x的！虽然他是个孤儿，从小就没有妈。
 　　跟着把自己养大的林老头学了十五年的功夫，读了十五年的书，怎么也算是个文武全才了吧？放古代那也是文武双全的双榜状元了，却被当做力工一样的使唤……这日子什么时候是个头儿啊！
 　　听说城里面给人盖房子一年还能拿好几万呢，自己每天死去活来的，一年也不过千八百块……
-　　“老头子，你不会是耍我吧？二百块？我很怀"/>
+　　“老头子，你不会是耍我吧？二百块？我很怀"
+            android:textColor="@color/black" />
     </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/show_more"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:background="@color/white">
+
         <ImageView
             android:id="@+id/more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:background="@drawable/button_more"
-            />
+            android:background="@drawable/button_more" />
+
         <ImageView
             android:id="@+id/more_up"
             android:layout_width="wrap_content"
@@ -215,101 +231,13 @@
 
     <!-- 分割 -->
     <LinearLayout
+        android:id="@+id/blank"
         android:layout_width="match_parent"
         android:layout_height="15dp"
-        android:background="@color/divide_color">
+        android:background="@color/divide_color"
+        android:orientation="horizontal">
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/white">
-
-        <ImageView
-            android:id="@+id/comm_cavaimage"
-            android:layout_width="100px"
-            android:layout_height="100px"
-            android:background="@drawable/logo"
-            android:layout_margin="@dimen/listview_image_margin"
-            android:textAppearance="?attr/textAppearanceListItem"
-            />
-
-        <LinearLayout
-            android:id="@+id/comm_comment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/comm_cavaimage"
-            android:orientation="horizontal">
-
-            <!-- 名字 -->
-            <TextView
-                android:id="@+id/comm_unick"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_margin="@dimen/listview_detail_margin"
-                android:textSize="@dimen/listview_detail_font_size"
-                android:textStyle="bold"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:text="名字"/>
-
-            <!--个人评分-->
-            <TextView
-                android:id="@+id/comm_grade"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:textColor="@color/colorGrade"
-                android:textSize="@dimen/listview_grade_font_size"
-                android:text="10"/>
-        </LinearLayout>
-
-            <!-- 个人评论 -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_below="@+id/comm_comment"
-                android:layout_toRightOf="@+id/comm_cavaimage"
-                >
-
-                <TextView
-                    android:id="@+id/comm_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginLeft="@dimen/listview_detail_margin"
-                    android:layout_marginBottom="@dimen/listview_detail_margin"
-                    android:text="很棒"
-                    android:textSize="@dimen/listview_detail_font_size"
-                    android:textAppearance="?attr/textAppearanceListItem"
-                    />
-
-                <!-- 评论时间 -->
-                <TextView
-                    android:id="@+id/comm_creatime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/listview_detail_margin"
-                    android:layout_marginBottom="@dimen/listview_detail_margin"
-                    android:textSize="20px"
-                    android:textAppearance="?attr/textAppearanceListItem"
-                    android:text="time"/>
-
-                <!-- 点赞 -->
-                <ImageView
-                    android:id="@+id/comm_agreetime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/listview_detail_margin"
-                    android:layout_marginBottom="@dimen/listview_detail_margin"
-                    android:textSize="@dimen/listview_detail_font_size"
-                    android:textAppearance="?attr/textAppearanceListItem" />
-            </LinearLayout>
-
-
-
-        </RelativeLayout>
 </LinearLayout>
+</ScrollView>

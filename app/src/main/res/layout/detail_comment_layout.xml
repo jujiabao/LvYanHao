@@ -1,81 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-
-    <ImageView
-        android:id="@+id/comm_cavaimage"
-        android:layout_width="50px"
-        android:layout_height="50px"
-        android:src="@drawable/logo"
-        android:layout_margin="@dimen/listview_image_margin"
-        android:textAppearance="?attr/textAppearanceListItem"
-        />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <!-- 名字 -->
-        <TextView
-            android:id="@+id/comm_unick"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/listview_detail_margin"
-            android:textSize="@dimen/listview_detail_font_size"
-            android:textStyle="bold"
-            android:textAppearance="?attr/textAppearanceListItem" />
-
-        <!--个人评分-->
-        <TextView
-            android:id="@+id/comm_grade"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/listview_detail_margin"
-            android:layout_marginBottom="@dimen/listview_detail_margin"
-            android:textColor="@color/colorGrade"
-            android:textAppearance="?attr/textAppearanceListItem" />
-
-        <!-- 个人评论 -->
+    android:layout_height="match_parent"
+    android:padding="10dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/comment_avator"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/test_image"/>
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/right_linear"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_toRightOf="@id/comment_avator"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/head_linear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/comment_usernick"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:text="张晓明"/>
+                    <RatingBar
+                        android:id="@+id/comment_grade_bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        style="@style/fiveRatingBar_small"
+                        android:isIndicator="true"
+                        android:numStars="5"
+                        android:rating="1.0"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/head_linear"
+                    android:orientation="horizontal"
+                    android:gravity="right">
 
+                    <TextView
+                        android:id="@+id/comment_grade"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/head_linear"
+                        android:textSize="20dp"
+                        android:textColor="@color/colorGrade"
+                        android:text="6"/>
+                    <TextView
+                        android:id="@+id/comment_grade_test"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/comment_grade"
+                        android:gravity="right"
+                        android:textSize="10dp"
+                        android:textColor="@color/colorGrade"
+                        android:text="分"/>
+                </LinearLayout>
+            </RelativeLayout>
             <TextView
-                android:id="@+id/comm_content"
-                android:layout_width="wrap_content"
+                android:id="@+id/comment_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/listview_detail_margin"
-                android:layout_marginBottom="@dimen/listview_detail_margin"
-                android:text="@string/grade"
-                android:textSize="@dimen/listview_detail_font_size"
-                android:textAppearance="?attr/textAppearanceListItem" />
+                android:text="李克强总理在政府工作报告中，提出：“实体经济从来都是我国发展的根基，当务之急是加快转型升级。”
 
+中国经济的“虚实之争”的论战又起烽烟。其实，今年年初，董明珠提出“90后开网店国家隐患论”，宗庆后提出“唯新技术有用论”，就曾引发过一轮“虚实之争”。当时李克强总理以“网店是实体经济的一部分”为“虚实之争”定了调子。
+
+到这次“两会”上，马可•波罗瓷砖董事长黄建平率先向淘宝发难。董明珠们多多少少把矛头指向了网店、互联网+、新经济，似乎中国实体经济不振，应该怪到这些“虚拟”上。
+
+在决策层立主“脱虚向实”的大背景之下，应该厘清“虚”与“实”的概念。"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:id="@+id/comment_datetime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="1天前"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/comment_agree_btn"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/agree_red"/>
+                    <TextView
+                        android:id="@+id/comment_agree_times"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="100"/>
+                </LinearLayout>
+            </RelativeLayout>
         </LinearLayout>
-
-        <!-- 评论时间 -->
-        <TextView
-            android:id="@+id/comm_creatime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/listview_detail_margin"
-            android:layout_marginBottom="@dimen/listview_detail_margin"
-            android:textSize="@dimen/listview_detail_font_size"
-            android:textAppearance="?attr/textAppearanceListItem" />
-
-        <!-- 点赞 -->
-        <TextView
-            android:id="@+id/comm_agreetime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/listview_detail_margin"
-            android:layout_marginBottom="@dimen/listview_detail_margin"
-            android:textSize="@dimen/listview_detail_font_size"
-            android:textAppearance="?attr/textAppearanceListItem" />
-
-    </LinearLayout>
-
+    </RelativeLayout>
 </LinearLayout>

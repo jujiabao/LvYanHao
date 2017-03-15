@@ -4,43 +4,36 @@ import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lvyanhao.R;
-import com.lvyanhao.activity.FilmInfoListViewActivity;
-import com.lvyanhao.activity.FragmentActivity;
-import com.lvyanhao.activity.LoginActivity;
 import com.lvyanhao.component.MyFilmInfoListViewAdapter;
 import com.lvyanhao.dto.ResultDto;
 import com.lvyanhao.pullableview.PullToRefreshLayout;
-import com.lvyanhao.utils.MD5Util;
 import com.lvyanhao.utils.NetUtil;
 import com.lvyanhao.utils.SystemUtil;
-import com.lvyanhao.vo.FilmListInfoVo;
 import com.lvyanhao.vo.FilmListRefreshReqVo;
 import com.lvyanhao.vo.FilmListRefreshRspVo;
-import com.lvyanhao.vo.UserLoginReqVo;
-import com.lvyanhao.vo.UserLoginRspVo;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by lyh on 2017/3/5.
@@ -53,15 +46,21 @@ public class MainFragment extends Fragment {
     private PullToRefreshLayout myPullToRefreshLayout;
     private FilmListRefreshReqVo reqVo;
     private FilmListRefreshRspVo rspVo;
-    private List<FilmListRefreshRspVo> rspVosList;
+    private List<FilmListRefreshRspVo> rspVosList = new ArrayList<>();
    // private boolean isFirstIn = true;
     private MyAsyncTask myAsyncTask;
 
     private Context mContext;
 
+    private ImageView image;
+
     List<FilmListRefreshRspVo> items;
     MyFilmInfoListViewAdapter adapter;
 
+    private String token;
+    private int option_flag = -1;
+    private static final int IS_REFRESH = 0;
+    private static final int IS_LOADMORE = 1;
 
     @TargetApi(Build.VERSION_CODES.M)
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,10 +69,16 @@ public class MainFragment extends Fragment {
         ptrl = ((PullToRefreshLayout)mainLayout.findViewById(R.id.refresh_view));
         ptrl.setOnRefreshListener(new MyListener());
         listView = (ListView)mainLayout.findViewById(R.id.content_view);
+        image = (ImageView)mainLayout.findViewById(R.id.mimage);
         initListView();
-
         return mainLayout;
 
+    }
+
+    protected void setResource(Bitmap resource) {
+        RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), resource);
+        circularBitmapDrawable.setCornerRadius(15);
+        image.setImageDrawable(circularBitmapDrawable);
     }
 
     private void initListView()
@@ -152,6 +157,7 @@ public class MainFragment extends Fragment {
                     pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
                 }
             }.sendEmptyMessageDelayed(0, 5000);**/
+            option_flag = IS_REFRESH;
             Log.d("lvyanhao", "开启线程----");
             myPullToRefreshLayout = pullToRefreshLayout;
             myAsyncTask = new MyAsyncTask(mContext);
@@ -190,6 +196,12 @@ public class MainFragment extends Fragment {
 
                 }
             }.sendEmptyMessageDelayed(0, 5000);**/
+            option_flag = IS_LOADMORE;
+            Log.d("lvyanhao", "开启线程----");
+            myPullToRefreshLayout = pullToRefreshLayout;
+            myAsyncTask = new MyAsyncTask(mContext);
+            myAsyncTask.execute();
+            Log.d("lvyanhao", "线程end");
         }
     }
 
@@ -228,20 +240,35 @@ public class MainFragment extends Fragment {
         @SuppressWarnings("WrongThread")
         @Override
         protected Void doInBackground(Void... arg0) {
+            Log.d("lvyanhao", "当前标志："+option_flag);
             try {
-                Thread.sleep(2000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            token = SystemUtil.getTokenValueFromSP(mContext);
+            Log.d("lvyanhao-token", "取得SharedPreferences中的TOKEN值="+token);
             int flag = 99999;
-            FilmListRefreshReqVo reqVo = new FilmListRefreshReqVo();
-            reqVo.setFlimit("5");
-            Log.d("lvyanhao", "@ 拼包信息 FilmListRefreshReqVo="+reqVo);
+            if (option_flag == IS_REFRESH) {
+                int limit = rspVosList.size();
+                Log.d("lvyanhao", "limit="+limit);
+                if (limit == 0) {
+                    limit = 2;
+                }
+                rspVosList.clear();
+                reqVo = new FilmListRefreshReqVo();
+                reqVo.setFlimit(""+limit);
+                Log.d("lvyanhao", "@ 拼包信息 FilmListRefreshReqVo="+reqVo);
+            } else if (option_flag == IS_LOADMORE) {
+
+            } else {
+
+            }
             //写json
             Gson gson = new Gson();
             Log.d("lvyanhao", "@ 发往服务器信息："+gson.toJson(reqVo));
-//            String rsp = NetUtil.post(mContext, "/user/login.do", gson.toJson(reqVo), "1234567890");
-            String rsp = "{\"status\":\"0\",\"msg\":\"加载成功!\",\"data\":[{\"fid\":\"e0a29c46fd8611e6b9a99de9b5cfef3f\",\"fna\":\"美女与野兽\",\"fgrade\":null,\"fseio\":\"童话永经典，公主美流传\",\"fontm\":\"2017-03-17大陆上映\",\"fpicurl\":\"/film/post/default.jpg\"},{\"fid\":\"e0a2683efd8611e6b9a99de9b5cfef3f\",\"fna\":\"速度与激情8\",\"fgrade\":null,\"fseio\":\"车子又飚起，王者要归来\",\"fontm\":\"2017-04大陆上映\",\"fpicurl\":\"/film/post/default.jpg\"},{\"fid\":\"7563e300fd8511e6b9a99de9b5cfef3f\",\"fna\":\"一条狗的使命\",\"fgrade\":\"10.0\",\"fseio\":\"狗狗爱主人，重生不分离\",\"fontm\":\"2017-03-03大陆上映\",\"fpicurl\":\"/film/post/default.jpg\"},{\"fid\":\"7563ad40fd8511e6b9a99de9b5cfef3f\",\"fna\":\"爱乐之城\",\"fgrade\":null,\"fseio\":\"爵士钢琴家，恋爱舞天涯\",\"fontm\":\"2017-02-14大陆上映\",\"fpicurl\":\"/film/post/default.jpg\"},{\"fid\":\"d74784e2fd8411e6b9a99de9b5cfef3f\",\"fna\":\"乘风破浪\",\"fgrade\":null,\"fseio\":\"阿浪梦追逐，意外入险途\",\"fontm\":\"2017-01-28大陆上映\",\"fpicurl\":\"/film/post/default.jpg\"}]}";
+            String rsp = NetUtil.post(mContext, "/eval/film/refresh.do", gson.toJson(reqVo), token);
+//            String rsp = "{\"status\":\"0\",\"msg\":\"加载成功!\",\"data\":[{\"fid\":\"e0a29c46fd8611e6b9a99de9b5cfef3f\",\"fna\":\"美女与野兽\",\"fgrade\":null,\"fseio\":\"童话永经典，公主美流传\",\"fontm\":\"2017-03-17大陆上映\",\"fpicurl\":\"/film/post/default.jpg\"},{\"fid\":\"e0a2683efd8611e6b9a99de9b5cfef3f\",\"fna\":\"速度与激情8\",\"fgrade\":null,\"fseio\":\"车子又飚起，王者要归来\",\"fontm\":\"2017-04大陆上映\",\"fpicurl\":\"/film/post/default.jpg\"},{\"fid\":\"7563e300fd8511e6b9a99de9b5cfef3f\",\"fna\":\"一条狗的使命\",\"fgrade\":\"10.0\",\"fseio\":\"狗狗爱主人，重生不分离\",\"fontm\":\"2017-03-03大陆上映\",\"fpicurl\":\"/film/post/default.jpg\"},{\"fid\":\"7563ad40fd8511e6b9a99de9b5cfef3f\",\"fna\":\"爱乐之城\",\"fgrade\":null,\"fseio\":\"爵士钢琴家，恋爱舞天涯\",\"fontm\":\"2017-02-14大陆上映\",\"fpicurl\":\"/film/post/default.jpg\"},{\"fid\":\"d74784e2fd8411e6b9a99de9b5cfef3f\",\"fna\":\"乘风破浪\",\"fgrade\":null,\"fseio\":\"阿浪梦追逐，意外入险途\",\"fontm\":\"2017-01-28大陆上映\",\"fpicurl\":\"/film/post/default.jpg\"}]}";
             Log.d("lvyanhao", "@ 服务器返回信息："+rsp);
 
             List<FilmListRefreshRspVo> rspVos = null;
@@ -254,9 +281,8 @@ public class MainFragment extends Fragment {
                 String data = gson.toJson(resultDto.getData());
                 Log.d("lvyanhao", "@ 返回报文体：data="+data);
                 rspVos = gson.fromJson(data, t);
-                rspVosList = rspVos;
+                rspVosList.addAll(rspVos);
             } catch (Exception e) {
-                Toast.makeText(context, "错误信息："+e.getMessage(), Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
             Log.d("lvyanhao", "@ 报文体明细："+rspVos);

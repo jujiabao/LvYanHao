@@ -7,16 +7,15 @@
 
     <ImageView
         android:id="@+id/mimage"
-        android:layout_width="300px"
-        android:layout_height="350px"
+        android:layout_width="250px"
+        android:layout_height="250px"
         android:layout_margin="@dimen/listview_image_margin"
+        android:background="@drawable/test_image"
         />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="9dp"
-        android:layout_marginBottom="9dp"
         android:orientation="vertical">
 
         <!-- 电影名 -->
@@ -24,9 +23,9 @@
             android:id="@+id/filmna"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:textSize="16dp"
-
+            android:layout_margin="@dimen/listview_detail_margin"
+            android:textSize="@dimen/listview_detail_tile_font_size"
+            android:textStyle="bold"
             android:textAppearance="?attr/textAppearanceListItem" />
 
         <!-- 观众平均评分 -->
@@ -43,18 +42,16 @@
                 android:layout_marginBottom="@dimen/listview_detail_margin"
                 android:text="@string/grade"
                 android:textSize="@dimen/listview_detail_font_size"
-                android:textColor="@color/gray_more"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
             <TextView
                 android:id="@+id/filmlv"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/listview_detail_margin"
                 android:layout_marginBottom="@dimen/listview_detail_margin"
                 android:textColor="@color/colorGrade"
-                android:textSize="17dp"
-                 />
+                android:textAppearance="?attr/textAppearanceListItem" />
 
         </LinearLayout>
 
@@ -66,7 +63,6 @@
             android:layout_marginLeft="@dimen/listview_detail_margin"
             android:layout_marginBottom="@dimen/listview_detail_margin"
             android:textSize="@dimen/listview_detail_font_size"
-            android:textColor="@color/gray_more"
             android:textAppearance="?attr/textAppearanceListItem" />
 
         <!-- 开映时间 -->
@@ -77,8 +73,22 @@
             android:layout_marginLeft="@dimen/listview_detail_margin"
             android:layout_marginBottom="@dimen/listview_detail_margin"
             android:textSize="@dimen/listview_detail_font_size"
-            android:textColor="@color/gray_more"
             android:textAppearance="?attr/textAppearanceListItem" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="right">
+
+        <!-- 评分+点评 -->
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="评价"
+            />
 
     </LinearLayout>
 
