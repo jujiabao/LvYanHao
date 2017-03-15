@@ -65,7 +65,7 @@ public class MainFragment extends Fragment {
     @TargetApi(Build.VERSION_CODES.M)
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View mainLayout = inflater.inflate(R.layout.activity_listview,container,false);
-        mContext = getContext();
+        mContext = getActivity().getApplicationContext();
         ptrl = ((PullToRefreshLayout)mainLayout.findViewById(R.id.refresh_view));
         ptrl.setOnRefreshListener(new MyListener());
         listView = (ListView)mainLayout.findViewById(R.id.content_view);
