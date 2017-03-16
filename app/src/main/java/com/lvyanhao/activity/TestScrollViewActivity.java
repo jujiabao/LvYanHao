@@ -1,7 +1,10 @@
 package com.lvyanhao.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,12 +20,23 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lvyanhao.R;
 import com.lvyanhao.component.MyFilmCommentViewAdapter;
+import com.lvyanhao.component.MyFilmInfoListViewAdapter;
+import com.lvyanhao.dto.ResultDto;
 import com.lvyanhao.pullableview.PullToRefreshLayout;
+import com.lvyanhao.utils.NetUtil;
 import com.lvyanhao.utils.SystemUtil;
 import com.lvyanhao.vo.CommentListLoadMoreRspVo;
+import com.lvyanhao.vo.FilmDetailReqVo;
+import com.lvyanhao.vo.FilmDetailRspVo;
+import com.lvyanhao.vo.FilmListLoadMoreReqVo;
+import com.lvyanhao.vo.FilmListLoadMoreRspVo;
+import com.lvyanhao.vo.FilmListRefreshReqVo;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -56,13 +70,38 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
 
     private Button comment_agree_btn;
 
+    private static String fid = null;
+    private Bundle bundle;
+
+    private String token;
+    private PullToRefreshLayout myPullToRefreshLayout;
+    private PullToRefreshLayout ptrl;
+    private boolean isFirstIn = true;
+    private MyFilmDetailAsyncTask myFilmDetailAsyncTask;
+
+    //电影详情页面的初始化
+    private ImageView iv_blur;
+    private ImageView iv_filmPost;
+    private TextView tv_filmna;
+    private TextView tv_filmena;
+    private TextView tv_filmlv;
+    private TextView tv_filmcount;
+    private TextView tv_filmtp;
+    private TextView tv_filmarea;
+    private TextView tv_filmtm;
+    private TextView tv_filmplaytime;
+    private TextView tv_filmintro;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scrollview);
         mContext = getApplicationContext();
-        ((PullToRefreshLayout) findViewById(R.id.film_refresh_view))
-                .setOnRefreshListener(new MyListener());
+        bundle = this.getIntent().getExtras();
+        fid = bundle.getString("fid");
+        System.out.println("当前电影ID："+fid);
+        ptrl = ((PullToRefreshLayout) findViewById(R.id.film_refresh_view));
+        ptrl.setOnRefreshListener(new MyListener());
         listView = (ListView)findViewById(R.id.content_view);
         findViews();
         initData();
@@ -126,10 +165,34 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
         mImageShrinkUp = (ImageView) findViewById(R.id.more_up);
         comment_agree_btn = (Button) findViewById(R.id.comment_agree_btn);
         mShowMore.setOnClickListener(this);
-
+        //电影详情界面的初始化
+        iv_blur = (ImageView) findViewById(R.id.iv_blur);
+        iv_filmPost = (ImageView) findViewById(R.id.iv_filmpost);
+        tv_filmna = (TextView) findViewById(R.id.filmna);
+        tv_filmena = (TextView) findViewById(R.id.filmena);
+        tv_filmlv = (TextView) findViewById(R.id.filmlv);
+        tv_filmcount = (TextView) findViewById(R.id.filmcount);
+        tv_filmtp = (TextView) findViewById(R.id.filmtp);
+        tv_filmarea = (TextView) findViewById(R.id.filmarea);
+        tv_filmtm = (TextView) findViewById(R.id.filmtm);
+        tv_filmplaytime = (TextView) findViewById(R.id.filmplaytime);
+        tv_filmintro = (TextView) findViewById(R.id.film_content);
     }
 
-
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus)
+    {
+        super.onWindowFocusChanged(hasFocus);
+        // 第一次进入自动刷新
+        if (isFirstIn)
+        {
+            /**
+             * 第一次到这界面时，先启动线程刷新页面
+             */
+            ptrl.autoRefresh();
+            isFirstIn = false;
+        }
+    }
 
     public void onClick(View v) {
         switch (v.getId()) {
@@ -179,6 +242,9 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
 
         @Override
         public void onRefresh(final PullToRefreshLayout pullToRefreshLayout) {
+            myPullToRefreshLayout = pullToRefreshLayout;
+            myFilmDetailAsyncTask = new MyFilmDetailAsyncTask(mContext);
+            myFilmDetailAsyncTask.execute();
             new Handler()
             {
                 @Override
@@ -193,6 +259,8 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
 
         @Override
         public void onLoadMore(final PullToRefreshLayout pullToRefreshLayout) {
+            myPullToRefreshLayout = pullToRefreshLayout;
+
             new Handler()
             {
                 @Override
@@ -218,6 +286,113 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
                 }
             }.sendEmptyMessageDelayed(0, 2000);
         }
-
     }
+
+    class MyFilmDetailAsyncTask extends AsyncTask<Void, Integer, Void> {
+        private ProgressDialog dialog = null;
+        private Context context;
+
+        //返回报文头部分
+        private ResultDto resultDto = null;
+        private FilmDetailRspVo rspVo = null;
+
+        public MyFilmDetailAsyncTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @SuppressWarnings("WrongThread")
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            token = SystemUtil.getTokenValueFromSP(mContext);
+            Log.d("lvyanhao-token", "取得SharedPreferences中的TOKEN值="+token);
+            int flag = 99999;
+            //电影详情
+            FilmDetailReqVo reqVo = new FilmDetailReqVo();
+            reqVo.setFid(fid);
+            Log.d("lvyanhao", "@ 拼包信息 FilmDetailReqVo="+ reqVo);
+            //写json
+            Gson gson = new Gson();
+            Log.d("lvyanhao", "@ 发往服务器信息："+gson.toJson(reqVo));
+            String rsp = NetUtil.post(mContext, "/eval/film/detail.do", gson.toJson(reqVo), token);
+            //返回报文具体操作
+            rspVo = null;
+            try {
+                resultDto = gson.fromJson(rsp, ResultDto.class);
+                Log.d("lvyanhao", "@ 拆包明细："+ resultDto.getStatus() + "，" + resultDto.getMsg());
+                //拆包返回的
+                Type t = new TypeToken<FilmDetailRspVo>(){}.getType();
+                //转换报文体内容
+                String data = gson.toJson(resultDto.getData());
+                Log.d("lvyanhao", "@ 返回报文体：data="+data);
+                rspVo = gson.fromJson(data, t);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Log.d("lvyanhao", "@ 报文体明细："+rspVo);
+            if (resultDto == null) {
+                resultDto = new ResultDto();
+                resultDto.setStatus("-1");
+                resultDto.setMsg("系统未知错误！");
+                resultDto.setData(null);
+            }
+            flag = Integer.parseInt(resultDto.getStatus());
+            publishProgress(flag);
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            switch (values[0]) {
+                case 0:
+//                    iv_blur;
+                    Glide.with(context).load("http://"+ SystemUtil.getIpAndPortFromSP(context).get("ip")+":"+SystemUtil.getIpAndPortFromSP(context).get("port")+"/LvYanHaoServer"+rspVo.getFpicurl())
+                            .bitmapTransform(new BlurTransformation(context, 75), new CenterCrop(context))
+                            .into(iv_blur);
+
+                    Glide.with(context)
+                            .load("http://"+ SystemUtil.getIpAndPortFromSP(context).get("ip")+":"+SystemUtil.getIpAndPortFromSP(context).get("port")+"/LvYanHaoServer"+rspVo.getFpicurl())
+                            .error(R.drawable.film_not_found)
+                            .into(iv_filmPost);
+                    tv_filmna.setText(rspVo.getFna());
+                    tv_filmena.setText(rspVo.getFena());
+                    tv_filmlv.setText(rspVo.getFgrade());
+                    tv_filmcount.setText(rspVo.getFcount());
+                    tv_filmtp.setText(rspVo.getFtp());
+                    tv_filmarea.setText(rspVo.getFarea());
+                    tv_filmtm.setText(rspVo.getFdura());
+                    tv_filmplaytime.setText(rspVo.getFontm());
+                    tv_filmintro.setText(rspVo.getFintro());
+
+                    myPullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+                    break;
+                case 99999:
+                    Toast.makeText(context, "连接网络错误！", Toast.LENGTH_SHORT).show();
+                    myPullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                    break;
+                case 99998:
+                    Toast.makeText(context, "无法判定的操作！", Toast.LENGTH_SHORT).show();
+                    myPullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                    break;
+                default:
+                    Toast.makeText(context, resultDto.getMsg(), Toast.LENGTH_SHORT).show();
+                    myPullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                    break;
+            }
+        }
+
+        @Override
+        protected void onCancelled(Void result) {
+            super.onCancelled(result);
+        }
+
+    };
+
+
+
 }

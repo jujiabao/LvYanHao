@@ -64,12 +64,19 @@ public class FilmDetailCommentActivity extends Activity implements View.OnClickL
 
     private boolean isFirstIn = true;
 
+    private Bundle bundle;
+
+    private static String fid = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.detail_item_layout);
         setContentView(R.layout.activity_scrollview);
         mContext = getApplicationContext();
+        bundle = this.getIntent().getExtras();
+        fid = bundle.getString("fid");
+        System.out.println("当前电影ID："+fid);
         ptrl = ((PullToRefreshLayout) findViewById(R.id.film_refresh_view));
         ptrl.setOnRefreshListener(new MyListener());
         listView = (ListView) findViewById(R.id.film_comment_view);

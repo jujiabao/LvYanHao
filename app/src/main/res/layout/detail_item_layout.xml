@@ -90,12 +90,28 @@
                     android:textSize="@dimen/listview_grade_font_size" />
 
                 <TextView
-                    android:id="@+id/filmcount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/listview_detail_margin"
                     android:layout_marginLeft="@dimen/listview_detail_margin"
-                    android:text="10人"
+                    android:text="(共"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="@color/whitesmoke"
+                    android:textSize="30px" />
+
+                <TextView
+                    android:id="@+id/filmcount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="@color/colorGrade"
+                    android:textSize="30px" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="人参与评价)"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textColor="@color/whitesmoke"
                     android:textSize="30px" />

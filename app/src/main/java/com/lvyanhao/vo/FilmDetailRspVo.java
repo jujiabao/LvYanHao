@@ -11,11 +11,20 @@ public class FilmDetailRspVo implements Serializable {
     private String fena;
     private String fgrade;
     private String farea;
+    private String fdura;
     private String ftp;
-    private String fintro;//ÏêÏ¸½éÉÜ
-    private String fontm;//ÉÏÓ³Ê±¼ä
+    private String fintro;//è¯¦ç»†ä»‹ç»
+    private String fontm;//ä¸Šæ˜ æ—¶é—´
     private String fpicurl;
-    private String fcount;//ÆÀÂÛÈËÊı
+    private String fcount;//è¯„è®ºäººæ•°
+
+    public String getFdura() {
+        return fdura;
+    }
+
+    public void setFdura(String fdura) {
+        this.fdura = fdura;
+    }
 
     public String getFcount() {
         return fcount;
@@ -105,6 +114,7 @@ public class FilmDetailRspVo implements Serializable {
                 ", fena='" + fena + '\'' +
                 ", fgrade='" + fgrade + '\'' +
                 ", farea='" + farea + '\'' +
+                ", fdura='" + fdura + '\'' +
                 ", ftp='" + ftp + '\'' +
                 ", fintro='" + fintro + '\'' +
                 ", fontm='" + fontm + '\'' +

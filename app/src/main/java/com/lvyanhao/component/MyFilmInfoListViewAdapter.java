@@ -52,6 +52,7 @@ public class MyFilmInfoListViewAdapter extends BaseAdapter {
 		ImageView avatorIm = (ImageView) view.findViewById(R.id.mimage);
 		Glide.with(context)
 				.load("http://"+ SystemUtil.getIpAndPortFromSP(context).get("ip")+":"+SystemUtil.getIpAndPortFromSP(context).get("port")+"/LvYanHaoServer"+items.get(position).getFpicurl())
+				.error(R.drawable.film_not_found)
 				.into(avatorIm);
 
 		TextView filmnaTv = (TextView) view.findViewById(R.id.filmna);

@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -22,6 +23,9 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lvyanhao.R;
+import com.lvyanhao.activity.FilmDetailCommentActivity;
+import com.lvyanhao.activity.TestScrollViewActivity;
+import com.lvyanhao.activity.VerifyRgcodeActivity;
 import com.lvyanhao.component.MyFilmInfoListViewAdapter;
 import com.lvyanhao.dto.ResultDto;
 import com.lvyanhao.pullableview.PullToRefreshLayout;
@@ -64,6 +68,8 @@ public class MainFragment extends Fragment {
     private static final int IS_REFRESH = 0;
     private static final int IS_LOADMORE = 1;
 
+    private static final int LIMIT_PAGE = 4;
+
     @TargetApi(Build.VERSION_CODES.M)
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View mainLayout = inflater.inflate(R.layout.activity_listview,container,false);
@@ -85,20 +91,6 @@ public class MainFragment extends Fragment {
 
     private void initListView()
     {
-        /**items = new ArrayList<FilmListRefreshRspVo>();
-        for (int i = 0; i < 1; i++) {
-//			items.add("这里是item " + i);
-            FilmListInfoVo filmListInfoVo = new FilmListInfoVo(i);
-            filmListInfoVo.setFid(UUID.randomUUID().toString());
-            filmListInfoVo.setFilmName("大闹天竺"+i);
-            filmListInfoVo.setFilmPosterUrl("http://localhost:8080/FilmSystem/getPic.do");
-            filmListInfoVo.setFilmLevel("7.9");
-            filmListInfoVo.setFilmSimpleInfo("宝强大傻逼"+i);
-            filmListInfoVo.setFilmOpenTime("2017年02月22日");
-            items.add(filmListInfoVo);
-        }
-        adapter = new MyFilmInfoListViewAdapter(mContext, items);
-        listView.setAdapter(adapter);**/
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
         {
 
@@ -122,10 +114,21 @@ public class MainFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id)
             {
-                Log.d("jujiabao", "当前itemId="+parent.getAdapter().getItemId(position));
+                rspVo = (FilmListLoadMoreRspVo) parent.getAdapter().getItem(position);
+                Log.d("jujiabao", "点击listview，获得电影ID="+rspVo.getFid());
                 Toast.makeText(mContext,
-                        " Click on " + parent.getAdapter().getItemId(position),
+                        " Click on " + rspVo.getFid(),
                         Toast.LENGTH_SHORT).show();
+                if (rspVo == null) {
+                    Log.d("lvyanhao", "当前Item绑定数据为空！");
+                    return;
+                }
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putString("fid", rspVo.getFid());
+                intent.putExtras(bundle);
+                intent.setClass(mContext, TestScrollViewActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -134,76 +137,24 @@ public class MainFragment extends Fragment {
 
         @Override
         public void onRefresh(final PullToRefreshLayout pullToRefreshLayout) {
-            // 下拉刷新操作
-            /**new Handler()
-            {
-                @Override
-                public void handleMessage(Message msg)
-                {
-                    //刷新先清空
-                    items.clear();
-                    for (int i = 0; i < 2; i++) {
-                        FilmListInfoVo filmListInfoVo = new FilmListInfoVo(i);
-                        filmListInfoVo.setFid(UUID.randomUUID().toString());
-                        filmListInfoVo.setFilmName(UUID.randomUUID().toString().substring(0,6));
-                        filmListInfoVo.setFilmPosterUrl("http://localhost:8080/FilmSystem/getPic.do");
-                        filmListInfoVo.setFilmLevel("7.9");
-                        filmListInfoVo.setFilmSimpleInfo("大傻逼"+i);
-                        filmListInfoVo.setFilmOpenTime("2017年02月22日");
-                        items.add(filmListInfoVo);
-                    }
-                    adapter = new MyFilmInfoListViewAdapter(mContext, items);
-                    listView.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
-                    // 千万别忘了告诉控件刷新完毕了哦！
-                    pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
-                }
-            }.sendEmptyMessageDelayed(0, 5000);**/
+            /**
+             * 下拉刷新
+             */
             option_flag = IS_REFRESH;
-            Log.d("lvyanhao", "开启线程----");
             myPullToRefreshLayout = pullToRefreshLayout;
             myAsyncTask = new MyAsyncTask(mContext);
             myAsyncTask.execute();
-            Log.d("lvyanhao", "线程end");
         }
 
         @Override
         public void onLoadMore(final PullToRefreshLayout pullToRefreshLayout) {
             /**
-             * 这边需要请求网络
+             * 上拉加载更多
              */
-            /**new Handler()
-            {
-                @Override
-                public void handleMessage(Message msg)
-                {
-
-
-                    for (int i = 0; i < 2; i++) {
-                        FilmListInfoVo filmListInfoVo = new FilmListInfoVo(i);
-                        filmListInfoVo.setFid(UUID.randomUUID().toString());
-                        filmListInfoVo.setFilmName(UUID.randomUUID().toString().substring(0,6));
-                        filmListInfoVo.setFilmPosterUrl("http://localhost:8080/FilmSystem/getPic.do");
-                        filmListInfoVo.setFilmLevel("7.9");
-                        filmListInfoVo.setFilmSimpleInfo("大傻逼"+i);
-                        filmListInfoVo.setFilmOpenTime("2017年02月22日");
-                        items.add(filmListInfoVo);
-                    }
-                    adapter = new MyFilmInfoListViewAdapter(mContext, items);
-                    listView.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
-
-                    // 千万别忘了告诉控件加载完毕了哦！
-                    pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
-
-                }
-            }.sendEmptyMessageDelayed(0, 5000);**/
             option_flag = IS_LOADMORE;
-            Log.d("lvyanhao", "开启线程----");
             myPullToRefreshLayout = pullToRefreshLayout;
             myAsyncTask = new MyAsyncTask(mContext);
             myAsyncTask.execute();
-            Log.d("lvyanhao", "线程end");
         }
     }
 
@@ -221,22 +172,6 @@ public class MainFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            /*dialog = ProgressDialog.show(context, null, "正在登录，请稍后...", false);
-            dialog.setCancelable(true);
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    try {
-                        cancel(true);//取消所有的操作
-                        //主动抛出异常
-                        throw new RuntimeException("用户主动取消请求");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });*/
         }
 
         @SuppressWarnings("WrongThread")
@@ -258,7 +193,7 @@ public class MainFragment extends Fragment {
                 int limit = rspVosList.size();
                 Log.d("lvyanhao", "limit="+limit);
                 if (limit == 0) {
-                    limit = 5;
+                    limit = LIMIT_PAGE;
                 }
                 rspVosList.clear();
                 refreshReqVo = new FilmListRefreshReqVo();
@@ -270,7 +205,7 @@ public class MainFragment extends Fragment {
                 Log.d("lvyanhao", "@ 服务器返回信息："+rsp);
             } else if (option_flag == IS_LOADMORE) {
                 loadmoreReqVo = new FilmListLoadMoreReqVo();
-                loadmoreReqVo.setFlimit("5");
+                loadmoreReqVo.setFlimit(""+LIMIT_PAGE);
                 loadmoreReqVo.setFst(""+rspVosList.size());
                 Log.d("lvyanhao", "@ 拼包信息 FilmListLoadMoreReqVo="+ loadmoreReqVo);
                 Log.d("lvyanhao", "@ 发往服务器信息："+gson.toJson(loadmoreReqVo));
@@ -316,7 +251,7 @@ public class MainFragment extends Fragment {
                     adapter = new MyFilmInfoListViewAdapter(mContext, rspVosList);
                     listView.setAdapter(adapter);
                     if (option_flag == IS_LOADMORE) {
-                        listView.setSelection(listView.getCount() - 5);
+                        listView.setSelection(listView.getCount() - (2*LIMIT_PAGE-1));
                     }
                     adapter.notifyDataSetChanged();
                     myPullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
