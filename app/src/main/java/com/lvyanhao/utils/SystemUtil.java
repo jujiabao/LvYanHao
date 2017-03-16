@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.TELEPHONY_SERVICE;
 
@@ -72,5 +75,16 @@ public class SystemUtil {
     public static String getTokenValueFromSP(Context context){
         SharedPreferences settings= context.getSharedPreferences("TOKEN", MODE_PRIVATE);
         return settings.getString("token","");
+    }
+
+    public static Map<String,Object> getIpAndPortFromSP(Context mContext) {
+        //拿出设置的数据
+        SharedPreferences settings= mContext.getSharedPreferences("setting_net", 0);
+        String ip = settings.getString("ip","");
+        int port = settings.getInt("port", 0);
+        Map<String, Object> map = new HashMap<>();
+        map.put("ip", ip);
+        map.put("port",port);
+        return map;
     }
 }

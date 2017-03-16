@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,6 +27,8 @@ import com.lvyanhao.dto.ResultDto;
 import com.lvyanhao.pullableview.PullToRefreshLayout;
 import com.lvyanhao.utils.NetUtil;
 import com.lvyanhao.utils.SystemUtil;
+import com.lvyanhao.vo.FilmListLoadMoreReqVo;
+import com.lvyanhao.vo.FilmListLoadMoreRspVo;
 import com.lvyanhao.vo.FilmListRefreshReqVo;
 import com.lvyanhao.vo.FilmListRefreshRspVo;
 
@@ -44,9 +45,10 @@ public class MainFragment extends Fragment {
     private ListView listView;
     private PullToRefreshLayout ptrl;
     private PullToRefreshLayout myPullToRefreshLayout;
-    private FilmListRefreshReqVo reqVo;
-    private FilmListRefreshRspVo rspVo;
-    private List<FilmListRefreshRspVo> rspVosList = new ArrayList<>();
+    private FilmListRefreshReqVo refreshReqVo;
+    private FilmListLoadMoreReqVo loadmoreReqVo;
+    private FilmListLoadMoreRspVo rspVo;
+    private List<FilmListLoadMoreRspVo> rspVosList = new ArrayList<>();
    // private boolean isFirstIn = true;
     private MyAsyncTask myAsyncTask;
 
@@ -104,7 +106,7 @@ public class MainFragment extends Fragment {
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id)
             {
-                rspVo = (FilmListRefreshRspVo) parent.getAdapter().getItem(position);
+                rspVo = (FilmListLoadMoreRspVo) parent.getAdapter().getItem(position);
                 Toast.makeText(
                         mContext,
                         "LongClick on "
@@ -249,35 +251,43 @@ public class MainFragment extends Fragment {
             token = SystemUtil.getTokenValueFromSP(mContext);
             Log.d("lvyanhao-token", "取得SharedPreferences中的TOKEN值="+token);
             int flag = 99999;
+            //写json
+            Gson gson = new Gson();
+            String rsp = "";
             if (option_flag == IS_REFRESH) {
                 int limit = rspVosList.size();
                 Log.d("lvyanhao", "limit="+limit);
                 if (limit == 0) {
-                    limit = 2;
+                    limit = 5;
                 }
                 rspVosList.clear();
-                reqVo = new FilmListRefreshReqVo();
-                reqVo.setFlimit(""+limit);
-                Log.d("lvyanhao", "@ 拼包信息 FilmListRefreshReqVo="+reqVo);
-            } else if (option_flag == IS_LOADMORE) {
-
-            } else {
-
-            }
-            //写json
-            Gson gson = new Gson();
-            Log.d("lvyanhao", "@ 发往服务器信息："+gson.toJson(reqVo));
-            String rsp = NetUtil.post(mContext, "/eval/film/refresh.do", gson.toJson(reqVo), token);
+                refreshReqVo = new FilmListRefreshReqVo();
+                refreshReqVo.setFlimit(""+limit);
+                Log.d("lvyanhao", "@ 拼包信息 FilmListRefreshReqVo="+ refreshReqVo);
+                Log.d("lvyanhao", "@ 发往服务器信息："+gson.toJson(refreshReqVo));
+                rsp = NetUtil.post(mContext, "/eval/film/refresh.do", gson.toJson(refreshReqVo), token);
 //            String rsp = "{\"status\":\"0\",\"msg\":\"加载成功!\",\"data\":[{\"fid\":\"e0a29c46fd8611e6b9a99de9b5cfef3f\",\"fna\":\"美女与野兽\",\"fgrade\":null,\"fseio\":\"童话永经典，公主美流传\",\"fontm\":\"2017-03-17大陆上映\",\"fpicurl\":\"/film/post/default.jpg\"},{\"fid\":\"e0a2683efd8611e6b9a99de9b5cfef3f\",\"fna\":\"速度与激情8\",\"fgrade\":null,\"fseio\":\"车子又飚起，王者要归来\",\"fontm\":\"2017-04大陆上映\",\"fpicurl\":\"/film/post/default.jpg\"},{\"fid\":\"7563e300fd8511e6b9a99de9b5cfef3f\",\"fna\":\"一条狗的使命\",\"fgrade\":\"10.0\",\"fseio\":\"狗狗爱主人，重生不分离\",\"fontm\":\"2017-03-03大陆上映\",\"fpicurl\":\"/film/post/default.jpg\"},{\"fid\":\"7563ad40fd8511e6b9a99de9b5cfef3f\",\"fna\":\"爱乐之城\",\"fgrade\":null,\"fseio\":\"爵士钢琴家，恋爱舞天涯\",\"fontm\":\"2017-02-14大陆上映\",\"fpicurl\":\"/film/post/default.jpg\"},{\"fid\":\"d74784e2fd8411e6b9a99de9b5cfef3f\",\"fna\":\"乘风破浪\",\"fgrade\":null,\"fseio\":\"阿浪梦追逐，意外入险途\",\"fontm\":\"2017-01-28大陆上映\",\"fpicurl\":\"/film/post/default.jpg\"}]}";
-            Log.d("lvyanhao", "@ 服务器返回信息："+rsp);
-
-            List<FilmListRefreshRspVo> rspVos = null;
+                Log.d("lvyanhao", "@ 服务器返回信息："+rsp);
+            } else if (option_flag == IS_LOADMORE) {
+                loadmoreReqVo = new FilmListLoadMoreReqVo();
+                loadmoreReqVo.setFlimit("5");
+                loadmoreReqVo.setFst(""+rspVosList.size());
+                Log.d("lvyanhao", "@ 拼包信息 FilmListLoadMoreReqVo="+ loadmoreReqVo);
+                Log.d("lvyanhao", "@ 发往服务器信息："+gson.toJson(loadmoreReqVo));
+                rsp = NetUtil.post(mContext, "/eval/film/ldmore.do", gson.toJson(loadmoreReqVo), token);
+            } else {
+                publishProgress(99998);
+                Log.d("jujiabao", "无法判定的操作:"+option_flag);
+                return null;
+            }
+            //返回报文具体操作
+            List<FilmListLoadMoreRspVo> rspVos = null;
             try {
                 resultDto = gson.fromJson(rsp, ResultDto.class);
                 Log.d("lvyanhao", "@ 拆包明细："+ resultDto.getStatus() + "，" + resultDto.getMsg());
                 //拆包返回的
-                Type t = new TypeToken<List<FilmListRefreshRspVo>>(){}.getType();
-                //发送请求
+                Type t = new TypeToken<List<FilmListLoadMoreRspVo>>(){}.getType();
+                //转换报文体内容
                 String data = gson.toJson(resultDto.getData());
                 Log.d("lvyanhao", "@ 返回报文体：data="+data);
                 rspVos = gson.fromJson(data, t);
@@ -305,14 +315,23 @@ public class MainFragment extends Fragment {
                 case 0:
                     adapter = new MyFilmInfoListViewAdapter(mContext, rspVosList);
                     listView.setAdapter(adapter);
+                    if (option_flag == IS_LOADMORE) {
+                        listView.setSelection(listView.getCount() - 5);
+                    }
                     adapter.notifyDataSetChanged();
                     myPullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
                     break;
                 case 99999:
                     Toast.makeText(context, "连接网络错误！", Toast.LENGTH_SHORT).show();
+                    myPullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                    break;
+                case 99998:
+                    Toast.makeText(context, "无法判定的操作！", Toast.LENGTH_SHORT).show();
+                    myPullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
                     break;
                 default:
                     Toast.makeText(context, resultDto.getMsg(), Toast.LENGTH_SHORT).show();
+                    myPullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
                     break;
             }
         }

@@ -11,7 +11,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lvyanhao.R;
+import com.lvyanhao.utils.SystemUtil;
 import com.lvyanhao.vo.FilmListInfoVo;
+import com.lvyanhao.vo.FilmListLoadMoreRspVo;
 import com.lvyanhao.vo.FilmListRefreshRspVo;
 
 import java.util.List;
@@ -19,10 +21,10 @@ import java.util.List;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class MyFilmInfoListViewAdapter extends BaseAdapter {
-	List<FilmListRefreshRspVo> items;
+	List<FilmListLoadMoreRspVo> items;
 	Context context;
 
-	public MyFilmInfoListViewAdapter(Context context, List<FilmListRefreshRspVo> items) {
+	public MyFilmInfoListViewAdapter(Context context, List<FilmListLoadMoreRspVo> items) {
 		this.context = context;
 		this.items = items;
 	}
@@ -48,8 +50,8 @@ public class MyFilmInfoListViewAdapter extends BaseAdapter {
 				R.layout.list_item_layout, null);
 
 		ImageView avatorIm = (ImageView) view.findViewById(R.id.mimage);
-		Glide.with(context).load("http://192.168.1.107:8888/LvYanHaoServer/pic/post/f6b199cbec71452ab9df3f618d052326_zj.jpeg")
-
+		Glide.with(context)
+				.load("http://"+ SystemUtil.getIpAndPortFromSP(context).get("ip")+":"+SystemUtil.getIpAndPortFromSP(context).get("port")+"/LvYanHaoServer"+items.get(position).getFpicurl())
 				.into(avatorIm);
 
 		TextView filmnaTv = (TextView) view.findViewById(R.id.filmna);

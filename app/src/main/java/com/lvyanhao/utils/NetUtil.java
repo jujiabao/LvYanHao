@@ -24,7 +24,7 @@ public class NetUtil {
 
     private static int PORT = 8888;
 
-    private static final String SERVER_NAME = "LvYanHaoServer";
+    public static final String SERVER_NAME = "LvYanHaoServer";
 
     private static String REQUEST_URL = PROTOCOL + IP + ":" + PORT + "/" + SERVER_NAME;
 
