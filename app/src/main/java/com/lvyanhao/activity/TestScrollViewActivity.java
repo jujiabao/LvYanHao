@@ -195,7 +195,7 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
 
     //ÆÀÂÛ
     public void comment(){
-        btn_want.setOnClickListener(new View.OnClickListener() {
+        btn_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(TestScrollViewActivity.this,CommentActivity.class);
