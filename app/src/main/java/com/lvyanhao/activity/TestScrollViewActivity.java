@@ -341,11 +341,16 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
             super.onProgressUpdate(values);
             switch (values[0]) {
                 case 0:
-//                    iv_blur;
+                    /**
+                     * 设置背景高斯模糊效果
+                     */
                     Glide.with(context).load("http://"+ SystemUtil.getIpAndPortFromSP(context).get("ip")+":"+SystemUtil.getIpAndPortFromSP(context).get("port")+"/LvYanHaoServer"+rspVo.getFpicurl())
+                            .error(R.color.black)
                             .bitmapTransform(new BlurTransformation(context, 75), new CenterCrop(context))
                             .into(iv_blur);
-
+                    /**
+                     * 设置电影海报
+                     */
                     Glide.with(context)
                             .load("http://"+ SystemUtil.getIpAndPortFromSP(context).get("ip")+":"+SystemUtil.getIpAndPortFromSP(context).get("port")+"/LvYanHaoServer"+rspVo.getFpicurl())
                             .error(R.drawable.film_not_found)
