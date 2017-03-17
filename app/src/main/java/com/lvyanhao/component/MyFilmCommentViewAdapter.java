@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -26,8 +27,6 @@ public class MyFilmCommentViewAdapter extends BaseAdapter {
 		this.context = context;
 		this.items = items;
 	}
-
-
 
 	@Override
 	public int getCount() {
@@ -55,8 +54,15 @@ public class MyFilmCommentViewAdapter extends BaseAdapter {
 				.into(avatorIm);
 
 		TextView cunick = (TextView) view.findViewById(R.id.comment_usernick);
-//		tv.setText(items.get(position));
 		cunick.setText(items.get(position).getCunick());
+
+		RatingBar ratingBar = (RatingBar) view.findViewById(R.id.comment_grade_bar);
+		ratingBar.setStepSize(0.2f);
+		try {
+			ratingBar.setRating(Float.parseFloat(items.get(position).getCgrade())/2);
+		} catch (Exception e) {
+			ratingBar.setRating(5/2);
+		}
 
 		TextView cgrade = (TextView) view.findViewById(R.id.comment_grade);
 		cgrade.setText(items.get(position).getCgrade());
@@ -69,6 +75,8 @@ public class MyFilmCommentViewAdapter extends BaseAdapter {
 
 		TextView cagreetime = (TextView) view.findViewById(R.id.comment_agree_times);
 		cagreetime.setText(items.get(position).getCagreetime());
+
+
 
 		return view;
 	}

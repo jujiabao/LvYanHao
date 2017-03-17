@@ -67,6 +67,7 @@ public class MainFragment extends Fragment {
     private int option_flag = -1;
     private static final int IS_REFRESH = 0;
     private static final int IS_LOADMORE = 1;
+    private boolean isFirstIn = true;
 
     private static final int LIMIT_PAGE = 4;
 
@@ -79,6 +80,10 @@ public class MainFragment extends Fragment {
         listView = (ListView)mainLayout.findViewById(R.id.content_view);
         image = (ImageView)mainLayout.findViewById(R.id.mimage);
         initListView();
+        if (isFirstIn) {
+            ptrl.autoRefresh();
+            isFirstIn = false;
+        }
         return mainLayout;
 
     }

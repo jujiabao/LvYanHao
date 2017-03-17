@@ -1,7 +1,6 @@
 package com.lvyanhao.component;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +11,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.lvyanhao.R;
 import com.lvyanhao.utils.SystemUtil;
-import com.lvyanhao.vo.FilmListInfoVo;
 import com.lvyanhao.vo.FilmListLoadMoreRspVo;
-import com.lvyanhao.vo.FilmListRefreshRspVo;
 
 import java.util.List;
-
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class MyFilmInfoListViewAdapter extends BaseAdapter {
 	List<FilmListLoadMoreRspVo> items;

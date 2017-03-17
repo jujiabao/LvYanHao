@@ -22,8 +22,8 @@ import java.util.TimerTask;
 
 /**
  * 自定义的布局，用来管理三个子控件，其中一个是下拉头，一个是包含内容的pullableView（可以是实现Pullable接口的的任何View），
- * 还有一个上拉头，更多详解见博客http://blog.csdn.net/zhongkejingwang/article/details/38868463
- * 
+ * 还有一个上拉头
+ *
  * @author 陈靖
  */
 public class PullToRefreshLayout extends RelativeLayout
@@ -161,7 +161,7 @@ public class PullToRefreshLayout extends RelativeLayout
 				timer.cancel();
 				requestLayout();
 			}
-			Log.d("handle", "handle");
+//			Log.d("handle", "handle");
 			// 刷新布局,会自动调用onLayout
 			requestLayout();
 			// 没有拖拉或者回弹完成
@@ -263,7 +263,7 @@ public class PullToRefreshLayout extends RelativeLayout
 
 	/**
 	 * 加载完毕，显示加载结果。注意：加载完成后一定要调用这个方法
-	 * 
+	 *
 	 * @param refreshResult
 	 *            PullToRefreshLayout.SUCCEED代表成功，PullToRefreshLayout.FAIL代表失败
 	 */
@@ -368,7 +368,7 @@ public class PullToRefreshLayout extends RelativeLayout
 
 	/*
 	 * （非 Javadoc）由父控件决定是否分发事件，防止事件冲突
-	 * 
+	 *
 	 * @see android.view.ViewGroup#dispatchTouchEvent(android.view.MotionEvent)
 	 */
 	@Override
@@ -505,7 +505,7 @@ public class PullToRefreshLayout extends RelativeLayout
 
 	/**
 	 * @author chenjing 自动模拟手指滑动的task
-	 * 
+	 *
 	 */
 	private class AutoRefreshAndLoadTask extends
 			AsyncTask<Integer, Float, String>
@@ -591,7 +591,7 @@ public class PullToRefreshLayout extends RelativeLayout
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b)
 	{
-		Log.d("Test", "Test");
+//		Log.d("Test", "Test");
 		if (!isLayout)
 		{
 			// 这里是第一次进来的时候做一些初始化
@@ -606,17 +606,21 @@ public class PullToRefreshLayout extends RelativeLayout
 					.getMeasuredHeight();
 		}
 		// 改变子控件的布局，这里直接用(pullDownY + pullUpY)作为偏移量，这样就可以不对当前状态作区分
-		refreshView.layout(0,
-				(int) (pullDownY + pullUpY) - refreshView.getMeasuredHeight(),
-				refreshView.getMeasuredWidth(), (int) (pullDownY + pullUpY));
-		pullableView.layout(0, (int) (pullDownY + pullUpY),
-				pullableView.getMeasuredWidth(), (int) (pullDownY + pullUpY)
-						+ pullableView.getMeasuredHeight());
-		loadmoreView.layout(0,
-				(int) (pullDownY + pullUpY) + pullableView.getMeasuredHeight(),
-				loadmoreView.getMeasuredWidth(),
-				(int) (pullDownY + pullUpY) + pullableView.getMeasuredHeight()
-						+ loadmoreView.getMeasuredHeight());
+		try {
+			refreshView.layout(0,
+                    (int) (pullDownY + pullUpY) - refreshView.getMeasuredHeight(),
+                    refreshView.getMeasuredWidth(), (int) (pullDownY + pullUpY));
+			pullableView.layout(0, (int) (pullDownY + pullUpY),
+                    pullableView.getMeasuredWidth(), (int) (pullDownY + pullUpY)
+                            + pullableView.getMeasuredHeight());
+			loadmoreView.layout(0,
+                    (int) (pullDownY + pullUpY) + pullableView.getMeasuredHeight(),
+                    loadmoreView.getMeasuredWidth(),
+                    (int) (pullDownY + pullUpY) + pullableView.getMeasuredHeight()
+                            + loadmoreView.getMeasuredHeight());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	class MyTimer
@@ -671,9 +675,9 @@ public class PullToRefreshLayout extends RelativeLayout
 
 	/**
 	 * 刷新加载回调接口
-	 * 
+	 *
 	 * @author chenjing
-	 * 
+	 *
 	 */
 	public interface OnRefreshListener
 	{

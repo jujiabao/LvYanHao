@@ -29,7 +29,9 @@ import com.lvyanhao.dto.ResultDto;
 import com.lvyanhao.pullableview.PullToRefreshLayout;
 import com.lvyanhao.utils.NetUtil;
 import com.lvyanhao.utils.SystemUtil;
+import com.lvyanhao.vo.CommentListLoadMoreReqVo;
 import com.lvyanhao.vo.CommentListLoadMoreRspVo;
+import com.lvyanhao.vo.CommentListRefreshReqVo;
 import com.lvyanhao.vo.FilmDetailReqVo;
 import com.lvyanhao.vo.FilmDetailRspVo;
 import com.lvyanhao.vo.FilmListLoadMoreReqVo;
@@ -64,8 +66,8 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
     private ImageView mImageShrinkUp;// 收起
 
     private ListView listView;
-    List<CommentListLoadMoreRspVo> items;
-    MyFilmCommentViewAdapter adapter;
+    private List<CommentListLoadMoreRspVo> items;
+    private MyFilmCommentViewAdapter adapter;
     private Context mContext;
 
     private Button comment_agree_btn;
@@ -78,6 +80,12 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
     private PullToRefreshLayout ptrl;
     private boolean isFirstIn = true;
     private MyFilmDetailAsyncTask myFilmDetailAsyncTask;
+    private MyCommentListAsyncTask myCommentListAsyncTask;
+    private static final int IS_REFRESH = 0;
+    private static final int IS_LOADMORE = 1;
+    private int option_status;
+    private static final int LIMIT_PAGE = 5;
+    private List<CommentListLoadMoreRspVo> rspVoList = new ArrayList<>();
 
     //电影详情页面的初始化
     private ImageView iv_blur;
@@ -111,24 +119,6 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
 
     private void initListView()
     {
-        items = new ArrayList<CommentListLoadMoreRspVo>();
-        for (int i = 0; i < 4; i++) {
-//			items.add("这里是item " + i);
-            CommentListLoadMoreRspVo commentListRspVo = new CommentListLoadMoreRspVo();
-            commentListRspVo.setCcid(UUID.randomUUID().toString());
-            commentListRspVo.setCfid(UUID.randomUUID().toString());
-            commentListRspVo.setCunick("大傻逼"+i);
-            commentListRspVo.setCcreatime("2017年3月12日");
-            commentListRspVo.setCagreetime("100");
-            commentListRspVo.setCgrade("9.8");
-            commentListRspVo.setCcontent("3456756754633gsfdgd3456756754633gsfdgdf3456756754633gsfdgdff");
-            items.add(commentListRspVo);
-        }
-        adapter = new MyFilmCommentViewAdapter(mContext, items);
-        listView.setAdapter(adapter);
-        listView.setFocusable(false);
-        SystemUtil.setListViewHeightBasedOnChildren(listView);
-
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
         {
             @Override
@@ -224,7 +214,7 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
     }
 
     private void initData(){
-        Glide.with(this).load(R.drawable.test)
+        Glide.with(this).load(R.drawable.test_image)
                 .bitmapTransform(new BlurTransformation(this, 75), new CenterCrop(this))
                 .into(blurImageView);
 //        filmPostIm = (ImageView) findViewById(R.id.comment_avator);
@@ -235,59 +225,40 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
                 .bitmapTransform(new CropCircleTransformation(this))
                 .into(filmPostIm); */
 //        filmPostIm.setImageDrawable(getResources().getDrawable(R.drawable.test_image));
-        filmPostIm.setBackgroundDrawable(getResources().getDrawable(R.drawable.test));
+        /*filmPostIm.setBackgroundDrawable(getResources().getDrawable(R.drawable.test));*/
     }
 
     class MyListener implements PullToRefreshLayout.OnRefreshListener{
 
         @Override
         public void onRefresh(final PullToRefreshLayout pullToRefreshLayout) {
+            option_status = IS_REFRESH;
             myPullToRefreshLayout = pullToRefreshLayout;
+            /**
+             * 执行电影详情获取线程
+             */
             myFilmDetailAsyncTask = new MyFilmDetailAsyncTask(mContext);
             myFilmDetailAsyncTask.execute();
-            new Handler()
-            {
-                @Override
-                public void handleMessage(Message msg)
-                {
-                    // 千万别忘了告诉控件刷新完毕了哦！
-                    pullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
-                }
-            }.sendEmptyMessageDelayed(0, 2000);
 
+            /**
+             * 执行评论列表加载线程
+             */
+            myCommentListAsyncTask = new MyCommentListAsyncTask(mContext);
+            myCommentListAsyncTask.execute();
         }
 
         @Override
         public void onLoadMore(final PullToRefreshLayout pullToRefreshLayout) {
+            option_status = IS_LOADMORE;
             myPullToRefreshLayout = pullToRefreshLayout;
-
-            new Handler()
-            {
-                @Override
-                public void handleMessage(Message msg)
-                {
-                    for (int i = 0; i < 4; i++) {
-                        CommentListLoadMoreRspVo commentListRspVo = new CommentListLoadMoreRspVo();
-                        commentListRspVo.setCcid(UUID.randomUUID().toString());
-                        commentListRspVo.setCfid(UUID.randomUUID().toString());
-                        commentListRspVo.setCunick("大傻逼"+i);
-                        commentListRspVo.setCcreatime("2017年3月12日");
-                        commentListRspVo.setCagreetime("100");
-                        commentListRspVo.setCgrade("9.8");
-                        commentListRspVo.setCcontent("3456756754633gsfdgd3456756754633gsfdgdf3456756754633gsfdgdff");
-                        items.add(commentListRspVo);
-                    }
-                    adapter = new MyFilmCommentViewAdapter(mContext, items);
-                    listView.setAdapter(adapter);
-                    SystemUtil.setListViewHeightBasedOnChildren(listView);
-                    adapter.notifyDataSetChanged();
-                    // 千万别忘了告诉控件加载完毕了哦！
-                    pullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
-                }
-            }.sendEmptyMessageDelayed(0, 2000);
+            myCommentListAsyncTask = new MyCommentListAsyncTask(mContext);
+            myCommentListAsyncTask.execute();
         }
     }
 
+    /**
+     * 电影详情列表
+     */
     class MyFilmDetailAsyncTask extends AsyncTask<Void, Integer, Void> {
         private ProgressDialog dialog = null;
         private Context context;
@@ -393,6 +364,126 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
 
     };
 
+    /**
+     * 加载评论列表
+     */
+    class MyCommentListAsyncTask extends AsyncTask<Void, Integer, Void> {
+        private ProgressDialog dialog = null;
+        private Context context;
 
+        //返回报文头部分
+        private ResultDto resultDto = null;
+        private List<CommentListLoadMoreRspVo> rspVos = new ArrayList<>();
+
+        public MyCommentListAsyncTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @SuppressWarnings("WrongThread")
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            token = SystemUtil.getTokenValueFromSP(mContext);
+            Log.d("lvyanhao-token", "取得SharedPreferences中的TOKEN值="+token);
+            int flag = 99999;
+            //写json
+            Gson gson = new Gson();
+            String rsp = "";
+            if (option_status == IS_REFRESH) {
+                int limit = rspVos.size();
+                Log.d("lvyanhao", "limit="+limit);
+                if (limit == 0) {
+                    limit = LIMIT_PAGE;
+                }
+                rspVoList.clear();
+                CommentListRefreshReqVo reqVo = new CommentListRefreshReqVo();
+                reqVo.setCfid(fid);
+                reqVo.setClimit(""+limit);
+                Log.d("lvyanhao", "@ 拼包信息 CommentListRefreshReqVo="+ reqVo);
+                Log.d("lvyanhao", "@ 发往服务器信息："+gson.toJson(reqVo));
+                rsp = NetUtil.post(mContext, "/eval/comment/refresh.do", gson.toJson(reqVo), token);
+            } else if (option_status == IS_LOADMORE) {
+                CommentListLoadMoreReqVo reqVo = new CommentListLoadMoreReqVo();
+                reqVo.setCfid(fid);
+                reqVo.setCst(""+rspVoList.size());
+                reqVo.setClimit(""+LIMIT_PAGE);
+                Log.d("lvyanhao", "@ 拼包信息 CommentListLoadMoreReqVo="+ reqVo);
+                Log.d("lvyanhao", "@ 发往服务器信息："+gson.toJson(reqVo));
+                rsp = NetUtil.post(mContext, "/eval/comment/ldmore.do", gson.toJson(reqVo), token);
+            } else {
+                publishProgress(99998);
+                Log.d("jujiabao", "无法判定的操作:"+option_status);
+                return null;
+            }
+            //返回报文具体操作
+            rspVos = null;
+            try {
+                resultDto = gson.fromJson(rsp, ResultDto.class);
+                Log.d("lvyanhao", "@ 拆包明细："+ resultDto.getStatus() + "，" + resultDto.getMsg());
+                //拆包返回的
+                Type t = new TypeToken<List<CommentListLoadMoreRspVo>>(){}.getType();
+                //转换报文体内容
+                String data = gson.toJson(resultDto.getData());
+                Log.d("lvyanhao", "@ 返回报文体：data="+data);
+                rspVos = gson.fromJson(data, t);
+                rspVoList.addAll(rspVos);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Log.d("lvyanhao", "@ 报文体明细："+rspVos);
+            if (resultDto == null) {
+                resultDto = new ResultDto();
+                resultDto.setStatus("-1");
+                resultDto.setMsg("系统未知错误！");
+                resultDto.setData(null);
+            }
+            flag = Integer.parseInt(resultDto.getStatus());
+            publishProgress(flag);
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            switch (values[0]) {
+                case 0:
+                    adapter = new MyFilmCommentViewAdapter(context, rspVoList);
+                    listView.setAdapter(adapter);
+                    if (option_status == IS_LOADMORE) {
+                        listView.setSelection(listView.getCount() - (2*LIMIT_PAGE-1));
+                    }
+                    adapter.notifyDataSetChanged();
+                    SystemUtil.setListViewHeightBasedOnChildren(listView);
+                    if (option_status == IS_LOADMORE)
+                        myPullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+                    break;
+                case 99999:
+                    Toast.makeText(context, "连接网络错误！", Toast.LENGTH_SHORT).show();
+                    if (option_status == IS_LOADMORE)
+                        myPullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                    break;
+                case 99998:
+                    Toast.makeText(context, "无法判定的操作！", Toast.LENGTH_SHORT).show();
+                    if (option_status == IS_LOADMORE)
+                        myPullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                    break;
+                default:
+                    Toast.makeText(context, resultDto.getMsg(), Toast.LENGTH_SHORT).show();
+                    if (option_status == IS_LOADMORE)
+                        myPullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                    break;
+            }
+        }
+
+        @Override
+        protected void onCancelled(Void result) {
+            super.onCancelled(result);
+        }
+
+    };
 
 }
