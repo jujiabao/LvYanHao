@@ -4,14 +4,16 @@
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/activity/FilmInfoListViewActivity.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/component/MyFilmInfoListViewAdapter.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/component/MyFilmInfoListViewListener.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/dummy/DummyContent.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/fragment/ItemsDivider.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/listactivity/ItemListActivity.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/pullableview/PullToRefreshLayout.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/pullableview/Pullable.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/pullableview/PullableListView.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/utils/JSONUtil.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/vo/CommentListLoadMoreReqVo.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/vo/FilmListLoadMoreReqVo.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/lvyanhao/vo/FilmListLoadMoreRspVo.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/anim" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/agree_gray.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/agree_red.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/load_failed.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/load_succeed.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/loading.png" charset="UTF-8" />
@@ -20,6 +22,15 @@
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/refresh_failed.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/refresh_succeed.png" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/refreshing.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/star_gray.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/star_gray1.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/star_gray16.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/star_gray18.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/star_yellow.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/star_yellow1.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/star_yellow16.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/star_yellow18.png" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/star_yellow2.png" charset="UTF-8" />
     <file url="PROJECT" charset="GBK" />
   </component>
 </project>
