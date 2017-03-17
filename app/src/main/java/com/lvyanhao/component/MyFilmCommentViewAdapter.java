@@ -2,6 +2,7 @@ package com.lvyanhao.component;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -30,6 +31,8 @@ import com.lvyanhao.vo.CommentListLoadMoreRspVo;
 import com.lvyanhao.vo.CommentListRefreshReqVo;
 import com.lvyanhao.vo.CommentListRefreshRspVo;
 
+import org.w3c.dom.Text;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +43,6 @@ import jp.wasabeef.glide.transformations.CropSquareTransformation;
 public class MyFilmCommentViewAdapter extends BaseAdapter {
 	List<CommentListLoadMoreRspVo> items;
 	Context context;
-	Button agreeBtn;
 	View mView;
 
 	public MyFilmCommentViewAdapter(Context context, List<CommentListLoadMoreRspVo> items) {
@@ -95,7 +97,7 @@ public class MyFilmCommentViewAdapter extends BaseAdapter {
 		ccontent.setText(items.get(position).getCcontent());
 
 		//设置点赞按钮状态
-		agreeBtn = (Button) view.findViewById(R.id.comment_agree_btn);
+		Button agreeBtn = (Button) view.findViewById(R.id.comment_agree_btn);
 		if ("1".equals(items.get(position).getCstatus())) {
 			//状态可以赞
 			agreeBtn.setBackgroundDrawable(view.getResources().getDrawable(R.drawable.agree_gray));
@@ -103,10 +105,11 @@ public class MyFilmCommentViewAdapter extends BaseAdapter {
 			//状态不可以赞
 			agreeBtn.setBackgroundDrawable(view.getResources().getDrawable(R.drawable.agree_red));
 		}
-		agreeBtn.setOnClickListener(new MyAgreeBtnListener(position));
 
 		TextView cagreetime = (TextView) view.findViewById(R.id.comment_agree_times);
 		cagreetime.setText(items.get(position).getCagreetime());
+
+		agreeBtn.setOnClickListener(new MyAgreeBtnListener(position, agreeBtn, cagreetime));
 
 		return view;
 	}
@@ -117,15 +120,19 @@ public class MyFilmCommentViewAdapter extends BaseAdapter {
 	private class MyAgreeBtnListener implements View.OnClickListener {
 
 		int position;
+		Button agreeBtn;
+		TextView agreeTimesTv;
 
-		public MyAgreeBtnListener(int position) {
+		public MyAgreeBtnListener(int position, Button agreeBtn, TextView agreeTimesTv) {
 			this.position = position;
+			this.agreeBtn = agreeBtn;
+			this.agreeTimesTv = agreeTimesTv;
 		}
 
 		@Override
 		public void onClick(View view) {
 //			Toast.makeText(context, "点赞"+items.get(position).getCcid(), Toast.LENGTH_SHORT).show();
-			MyAgreeAsyncTask myAgreeAsyncTask = new MyAgreeAsyncTask(context, position);
+			MyAgreeAsyncTask myAgreeAsyncTask = new MyAgreeAsyncTask(context, position, agreeBtn, agreeTimesTv);
 			myAgreeAsyncTask.execute();
 		}
 	}
@@ -138,14 +145,19 @@ public class MyFilmCommentViewAdapter extends BaseAdapter {
 		private Context context;
 		private int position;
 
+		private Button agreeBtn;
+		private TextView agreeTimesTv;
+
 		//返回报文头部分
 		private ResultDto resultDto = null;
 		private CommentAgreeRspVo rspVo = null;
 
 
-		public MyAgreeAsyncTask(Context context, int position) {
+		public MyAgreeAsyncTask(Context context, int position, Button agreeBtn, TextView agreeTimesTv) {
 			this.context = context;
 			this.position = position;
+			this.agreeBtn = agreeBtn;
+			this.agreeTimesTv = agreeTimesTv;
 		}
 
 		@Override
@@ -162,9 +174,6 @@ public class MyFilmCommentViewAdapter extends BaseAdapter {
 			CommentAgreeReqVo reqVo = new CommentAgreeReqVo();
 			reqVo.setCfid(items.get(position).getCfid());
 			reqVo.setCcid(items.get(position).getCcid());
-			System.out.println("@ 当前状态："+items.get(position).getCstatus());
-			System.out.println("@ 当前评论ID："+items.get(position).getCcid());
-			System.out.println("@ 当前电影ID："+items.get(position).getCfid());
 			if ("1".equals(items.get(position).getCstatus())) {
 				//还未点赞
 				reqVo.setCstatus("1");
@@ -213,11 +222,23 @@ public class MyFilmCommentViewAdapter extends BaseAdapter {
 							//点赞操作成功
 							Toast.makeText(context, "点赞成功！", Toast.LENGTH_SHORT).show();
 							agreeBtn.setBackgroundDrawable(mView.getResources().getDrawable(R.drawable.agree_red));
+							int i = Integer.parseInt(items.get(position).getCagreetime());
+							if (i >= 0) {
+								agreeTimesTv.setText(""+(++i));
+								agreeTimesTv.setTextColor(Color.RED);
+								items.get(position).setCagreetime(""+i);
+							}
 							items.get(position).setCstatus("0");
 						} else {
 							//取消点赞成功
 							Toast.makeText(context, "取消成功！", Toast.LENGTH_SHORT).show();
 							agreeBtn.setBackgroundDrawable(mView.getResources().getDrawable(R.drawable.agree_gray));
+							int i = Integer.parseInt(items.get(position).getCagreetime());
+							if (i > 0) {
+								agreeTimesTv.setText(""+(--i));
+								agreeTimesTv.setTextColor(Color.GRAY);
+								items.get(position).setCagreetime(""+i);
+							}
 							items.get(position).setCstatus("1");
 						}
 					} else {
