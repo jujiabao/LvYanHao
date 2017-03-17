@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -100,6 +101,10 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
     private TextView tv_filmplaytime;
     private TextView tv_filmintro;
 
+    //评论按钮
+    private Button btn_want;
+    private Button btn_comment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +120,7 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
         initData();
         initView();
         initListView();
+        comment();
     }
 
     private void initListView()
@@ -167,6 +173,9 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
         tv_filmtm = (TextView) findViewById(R.id.filmtm);
         tv_filmplaytime = (TextView) findViewById(R.id.filmplaytime);
         tv_filmintro = (TextView) findViewById(R.id.film_content);
+        //按钮初始化
+        btn_want = (Button) findViewById(R.id.btn_want);
+        btn_comment = (Button) findViewById(R.id.btn_comment);
     }
 
     @Override
@@ -182,6 +191,17 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
             ptrl.autoRefresh();
             isFirstIn = false;
         }
+    }
+
+    //评论
+    public void comment(){
+        btn_want.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(TestScrollViewActivity.this,CommentActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void onClick(View v) {

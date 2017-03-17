@@ -175,14 +175,14 @@
             android:layout_marginTop="15dp">
 
             <Button
-                android:id="@+id/btn_store"
+                android:id="@+id/btn_want"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_style"
-                android:text="收藏"
+                android:text="想看"
                 android:textColor="@color/white" />
 
             <Button
