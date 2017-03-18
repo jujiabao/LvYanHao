@@ -556,7 +556,7 @@ public class PullToRefreshLayout extends RelativeLayout
 	public void autoRefresh()
 	{
 		AutoRefreshAndLoadTask task = new AutoRefreshAndLoadTask();
-		task.execute(20);
+		task.execute(15);
 	}
 
 	/**

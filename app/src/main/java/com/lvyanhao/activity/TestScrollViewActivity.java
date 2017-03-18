@@ -27,6 +27,7 @@ import com.lvyanhao.R;
 import com.lvyanhao.component.MyFilmCommentViewAdapter;
 import com.lvyanhao.component.MyFilmInfoListViewAdapter;
 import com.lvyanhao.dto.ResultDto;
+import com.lvyanhao.layout.SwipeBackLayout;
 import com.lvyanhao.pullableview.PullToRefreshLayout;
 import com.lvyanhao.utils.NetUtil;
 import com.lvyanhao.utils.SystemUtil;
@@ -50,7 +51,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
  * Created by lyh on 2017/3/12.
  */
 
-public class TestScrollViewActivity extends Activity implements View.OnClickListener {
+public class TestScrollViewActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView blurImageView;
     private ImageView filmPostIm;
@@ -200,6 +201,7 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
             public void onClick(View view) {
                 Intent intent = new Intent(TestScrollViewActivity.this,CommentActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.in_from_top, R.anim.out_to_bottom);
             }
         });
     }

@@ -23,9 +23,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lvyanhao.R;
-import com.lvyanhao.activity.FilmDetailCommentActivity;
 import com.lvyanhao.activity.TestScrollViewActivity;
-import com.lvyanhao.activity.VerifyRgcodeActivity;
 import com.lvyanhao.component.MyFilmInfoListViewAdapter;
 import com.lvyanhao.dto.ResultDto;
 import com.lvyanhao.pullableview.PullToRefreshLayout;
@@ -134,6 +132,7 @@ public class MainFragment extends Fragment {
                 intent.putExtras(bundle);
                 intent.setClass(mContext, TestScrollViewActivity.class);
                 startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
             }
         });
     }

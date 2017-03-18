@@ -27,6 +27,7 @@ public class CommentActivity extends Activity {
     private ImageView filmPostIm;
     private ImageView blurImageView;
     private Button commentBtn;
+    private ImageView commentCancelBtn;
 
     private Context context;
 
@@ -52,6 +53,8 @@ public class CommentActivity extends Activity {
         grade = (TextView)findViewById(R.id.grade);
         commentBtn = (Button) findViewById(R.id.comment);
         commentBtn.setOnClickListener(new MyCommentListenr());
+        commentCancelBtn = (ImageView) findViewById(R.id.comment_cancel);
+        commentCancelBtn.setOnClickListener(new CommentCancelListener());
         /**
          * 实时显示RatingBar数值
          */
@@ -162,6 +165,17 @@ public class CommentActivity extends Activity {
         public void onClick(View view) {
             Toast.makeText(context, "提交成功！", Toast.LENGTH_SHORT).show();
             myOnRatingBarChangingListener.close();
+        }
+    }
+
+    /**
+     * 取消按钮
+     */
+    private class CommentCancelListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            CommentActivity.this.finish();
+            overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
         }
     }
 }

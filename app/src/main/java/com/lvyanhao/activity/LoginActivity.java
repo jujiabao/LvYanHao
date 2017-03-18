@@ -279,6 +279,7 @@ public class LoginActivity extends Activity {
                 Intent intent = new Intent(LoginActivity.this,FragmentActivity.class);
                 startActivity(intent);
 //                    finish();
+                overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                 break;
             case 99999:
                 Toast.makeText(context, "Á¬½ÓÍøÂç´íÎó£¡", Toast.LENGTH_SHORT).show();

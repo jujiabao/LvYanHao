@@ -39,4 +39,28 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!--设置Activity进入和退出的动画-->
+    <style name="SlideRightAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@null</item>
+        <item name="android:activityCloseEnterAnimation">@null</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
+        <item name="android:taskOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:taskOpenExitAnimation">@null</item>
+        <item name="android:taskCloseEnterAnimation">@null</item>
+        <item name="android:taskCloseExitAnimation">@anim/slide_out_right</item>
+        <item name="android:taskToFrontEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:taskToFrontExitAnimation">@null</item>
+        <item name="android:taskToBackEnterAnimation">@null</item>
+        <item name="android:taskToBackExitAnimation">@anim/slide_out_right</item>
+    </style>
+
+    <style name="AppTheme.TransparentActivity" parent="MyTitle">
+        <!--设置滑动的Activity背景透明-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- android:windowAnimationStyle引入动画 -->
+        <item name="android:windowAnimationStyle">@style/SlideRightAnimation</item>
+    </style>
+
 </resources>

@@ -31,15 +31,17 @@
             android:label="@string/register">
         </activity>
         <activity android:name=".activity.TestScrollViewActivity"
-            android:label="@string/register">
+            android:theme="@style/AppTheme.TransparentActivity"
+            android:label="美女与野兽">
         </activity>
         <activity android:name=".activity.FragmentActivity"
-            android:label="@string/register">
+            android:label="12345678">
         </activity>
         <activity android:name=".activity.VerifyFindPwdActivity"
             android:label="@string/register">
         </activity>
         <activity android:name=".activity.FilmDetailCommentActivity"
+            android:theme="@style/AppTheme.TransparentActivity"
             android:label="@string/register">
         </activity>
         <activity android:name=".activity.CommentActivity"
