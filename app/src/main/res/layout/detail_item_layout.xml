@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/listview_detail_margin"
-                android:text="生化危机"
+                android:text="@string/default_tv_show"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textColor="@color/white"
                 android:textSize="@dimen/listview_detail_tile_font_size"
@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/listview_detail_margin"
                 android:layout_marginLeft="@dimen/listview_detail_margin"
-                android:text="asd"
+                android:text="@string/default_tv_show"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textColor="@color/white"
                 android:textSize="@dimen/listview_detail_font_size" />
@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/listview_detail_margin"
                     android:layout_marginLeft="@dimen/listview_detail_margin"
-                    android:text="10"
+                    android:text="0"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textColor="@color/colorGrade"
                     android:textSize="@dimen/listview_grade_font_size" />
@@ -103,7 +103,7 @@
                     android:id="@+id/filmcount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10"
+                    android:text="0"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textColor="@color/colorGrade"
                     android:textSize="30px" />
@@ -125,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/listview_detail_margin"
                 android:layout_marginLeft="@dimen/listview_detail_margin"
-                android:text="喜剧"
+                android:text="@string/default_tv_show"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textColor="@color/whitesmoke"
                 android:textSize="@dimen/listview_detail_font_size" />
@@ -137,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/listview_detail_margin"
                 android:layout_marginLeft="@dimen/listview_detail_margin"
-                android:text="美国"
+                android:text="@string/default_tv_show"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textColor="@color/whitesmoke"
                 android:textSize="@dimen/listview_detail_font_size" />
@@ -149,7 +149,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/listview_detail_margin"
                 android:layout_marginLeft="@dimen/listview_detail_margin"
-                android:text="123分钟"
+                android:text="@string/default_tv_show"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textColor="@color/whitesmoke"
                 android:textSize="@dimen/listview_detail_font_size" />
@@ -161,7 +161,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/listview_detail_margin"
                 android:layout_marginLeft="@dimen/listview_detail_margin"
-                android:text="22222"
+                android:text="@string/default_tv_show"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textColor="@color/whitesmoke"
                 android:textSize="@dimen/listview_detail_font_size" />
@@ -214,10 +214,7 @@
             android:ellipsize="end"
             android:lineSpacingExtra="5dp"
             android:maxLines="3"
-            android:text="接过自己用生命换来的二百块钱，林逸最想骂的就是，妈拉个x的！虽然他是个孤儿，从小就没有妈。
-　　跟着把自己养大的林老头学了十五年的功夫，读了十五年的书，怎么也算是个文武全才了吧？放古代那也是文武双全的双榜状元了，却被当做力工一样的使唤……这日子什么时候是个头儿啊！
-　　听说城里面给人盖房子一年还能拿好几万呢，自己每天死去活来的，一年也不过千八百块……
-　　“老头子，你不会是耍我吧？二百块？我很怀"
+            android:text="@string/default_tv_show"
             android:textColor="@color/black" />
     </LinearLayout>
 

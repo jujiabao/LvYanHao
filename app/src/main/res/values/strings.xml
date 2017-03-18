@@ -27,6 +27,7 @@
     <string name="findpwd">找回密码</string>
     <string name="code">验证码</string>
     <string name="sure">确认</string>
+    <string name="default_tv_show">加载中</string>
 
     <declare-styleable name="StarRatingView">
         <!--星星点亮-->
