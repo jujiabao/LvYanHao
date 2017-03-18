@@ -1,17 +1,14 @@
 package com.lvyanhao.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -26,9 +23,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lvyanhao.R;
 import com.lvyanhao.component.MyFilmCommentViewAdapter;
-import com.lvyanhao.component.MyFilmInfoListViewAdapter;
 import com.lvyanhao.dto.ResultDto;
-import com.lvyanhao.pullableview.PullToRefreshLayout;
+import com.lvyanhao.layout.PullToRefreshLayout;
 import com.lvyanhao.utils.NetUtil;
 import com.lvyanhao.utils.SystemUtil;
 import com.lvyanhao.vo.CommentListLoadMoreReqVo;
@@ -36,14 +32,10 @@ import com.lvyanhao.vo.CommentListLoadMoreRspVo;
 import com.lvyanhao.vo.CommentListRefreshReqVo;
 import com.lvyanhao.vo.FilmDetailReqVo;
 import com.lvyanhao.vo.FilmDetailRspVo;
-import com.lvyanhao.vo.FilmListLoadMoreReqVo;
-import com.lvyanhao.vo.FilmListLoadMoreRspVo;
-import com.lvyanhao.vo.FilmListRefreshReqVo;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
@@ -51,7 +43,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
  * Created by lyh on 2017/3/12.
  */
 
-public class TestScrollViewActivity extends Activity implements View.OnClickListener {
+public class TestScrollViewActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView blurImageView;
     private ImageView filmPostIm;
@@ -109,7 +101,9 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.activity_scrollview);
+        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title_with_left_btn);
         mContext = getApplicationContext();
         bundle = this.getIntent().getExtras();
         fid = bundle.getString("fid");
@@ -156,6 +150,14 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
     }
 
     private void initView() {
+        ((TextView)findViewById(R.id.title_name)).setText(bundle.getString("fname"));
+        ((Button)findViewById(R.id.head_left_btn)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
+            }
+        });
         mContentText = (TextView) findViewById(R.id.film_content);
         mShowMore = (RelativeLayout) findViewById(R.id.show_more);
         mImageSpread = (ImageView) findViewById(R.id.more);
@@ -200,7 +202,11 @@ public class TestScrollViewActivity extends Activity implements View.OnClickList
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(TestScrollViewActivity.this,CommentActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("fname", tv_filmna.getText().toString());
+                intent.putExtras(bundle);
                 startActivity(intent);
+                overridePendingTransition(R.anim.in_from_top, R.anim.out_to_bottom);
             }
         });
     }

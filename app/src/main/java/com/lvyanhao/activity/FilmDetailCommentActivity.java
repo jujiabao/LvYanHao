@@ -21,7 +21,7 @@ import com.google.gson.reflect.TypeToken;
 import com.lvyanhao.R;
 import com.lvyanhao.component.MyFilmDetailCommentViewAdapter;
 import com.lvyanhao.dto.ResultDto;
-import com.lvyanhao.pullableview.PullToRefreshLayout;
+import com.lvyanhao.layout.PullToRefreshLayout;
 import com.lvyanhao.vo.CommentListRefreshReqVo;
 import com.lvyanhao.vo.CommentListRefreshRspVo;
 

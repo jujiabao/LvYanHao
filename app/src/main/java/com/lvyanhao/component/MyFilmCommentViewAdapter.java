@@ -3,7 +3,6 @@ package com.lvyanhao.component;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,24 +20,16 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lvyanhao.R;
 import com.lvyanhao.dto.ResultDto;
-import com.lvyanhao.pullableview.PullToRefreshLayout;
 import com.lvyanhao.utils.NetUtil;
 import com.lvyanhao.utils.SystemUtil;
 import com.lvyanhao.vo.CommentAgreeReqVo;
 import com.lvyanhao.vo.CommentAgreeRspVo;
-import com.lvyanhao.vo.CommentListLoadMoreReqVo;
 import com.lvyanhao.vo.CommentListLoadMoreRspVo;
-import com.lvyanhao.vo.CommentListRefreshReqVo;
-import com.lvyanhao.vo.CommentListRefreshRspVo;
-
-import org.w3c.dom.Text;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import jp.wasabeef.glide.transformations.CropSquareTransformation;
 
 public class MyFilmCommentViewAdapter extends BaseAdapter {
 	List<CommentListLoadMoreRspVo> items;

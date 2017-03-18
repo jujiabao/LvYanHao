@@ -19,7 +19,7 @@ import com.lvyanhao.R;
  */
 
 public class CommentActivity extends Activity {
-
+    private TextView tv_filmname;
     private RatingBar mRatingBar = null;
     private TextView mRatingBarLevel = null;
     private TextView comment_rate = null;
@@ -27,6 +27,7 @@ public class CommentActivity extends Activity {
     private ImageView filmPostIm;
     private ImageView blurImageView;
     private Button commentBtn;
+    private ImageView commentCancelBtn;
 
     private Context context;
 
@@ -34,6 +35,8 @@ public class CommentActivity extends Activity {
 
     private float ratingFinalValue = 0;
     private String content = "";
+
+    private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +49,17 @@ public class CommentActivity extends Activity {
 
     private void init(){
         context = getApplicationContext();
+        bundle = this.getIntent().getExtras();
+        tv_filmname = (TextView) findViewById(R.id.comment_title);
+        tv_filmname.setText(bundle.getString("fname"));
         mRatingBar = (RatingBar)findViewById(R.id.ratingbar);//星
         mRatingBarLevel = (TextView)findViewById(R.id.mRatingBarLevel);//星个数
         comment_rate = (TextView)findViewById(R.id.comment_rate);//评级
         grade = (TextView)findViewById(R.id.grade);
         commentBtn = (Button) findViewById(R.id.comment);
         commentBtn.setOnClickListener(new MyCommentListenr());
+        commentCancelBtn = (ImageView) findViewById(R.id.comment_cancel);
+        commentCancelBtn.setOnClickListener(new CommentCancelListener());
         /**
          * 实时显示RatingBar数值
          */
@@ -162,6 +170,17 @@ public class CommentActivity extends Activity {
         public void onClick(View view) {
             Toast.makeText(context, "提交成功！", Toast.LENGTH_SHORT).show();
             myOnRatingBarChangingListener.close();
+        }
+    }
+
+    /**
+     * 取消按钮
+     */
+    private class CommentCancelListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            CommentActivity.this.finish();
+            overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
         }
     }
 }
