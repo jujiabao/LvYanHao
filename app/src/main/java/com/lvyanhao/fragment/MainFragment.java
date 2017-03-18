@@ -129,6 +129,7 @@ public class MainFragment extends Fragment {
                 Intent intent = new Intent();
                 Bundle bundle = new Bundle();
                 bundle.putString("fid", rspVo.getFid());
+                bundle.putString("fname", rspVo.getFna());
                 intent.putExtras(bundle);
                 intent.setClass(mContext, TestScrollViewActivity.class);
                 startActivity(intent);

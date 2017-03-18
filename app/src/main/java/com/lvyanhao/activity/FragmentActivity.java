@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.lvyanhao.R;
@@ -45,11 +46,14 @@ public class FragmentActivity extends Activity implements View.OnClickListener {
 
     private FragmentManager fragmentManager;
 
+    private TextView tv_titlename;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.activity_fragment);
-
+        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title_common);
         initViews();
         fragmentManager = getFragmentManager();
         setTabSelection(0);
@@ -68,7 +72,7 @@ public class FragmentActivity extends Activity implements View.OnClickListener {
         listLayout.setOnClickListener(this);
         hotLayout.setOnClickListener(this);
         mineLayout.setOnClickListener(this);
-
+        tv_titlename = (TextView) findViewById(R.id.title_name);
     }
 
     @Override
@@ -98,6 +102,7 @@ public class FragmentActivity extends Activity implements View.OnClickListener {
         switch (index) {
             case 0:
                 // 当点击了首页tab时，改变控件的图片和文字颜色
+                tv_titlename.setText("热映/待映");
                 mainImage.setImageResource(R.drawable.fragmeng_main);
                 mainText.setTextColor(Color.RED);
                 if (mainFragment == null) {
@@ -111,6 +116,7 @@ public class FragmentActivity extends Activity implements View.OnClickListener {
                 break;
             case 1:
                 // 当点击了热点tab时，改变控件的图片和文字颜色
+                tv_titlename.setText("广场");
                 hotImage.setImageResource(R.drawable.fragment_hot);
                 hotText.setTextColor(Color.RED);
                 if (hotFragment == null) {
@@ -124,6 +130,7 @@ public class FragmentActivity extends Activity implements View.OnClickListener {
                 break;
             case 2:
                 // 当点击了个人tab时，改变控件的图片和文字颜色
+                tv_titlename.setText("我的");
                 mineImage.setImageResource(R.drawable.fragment_mine);
                 mineText.setTextColor(Color.RED);
                 if (mineFragment == null) {

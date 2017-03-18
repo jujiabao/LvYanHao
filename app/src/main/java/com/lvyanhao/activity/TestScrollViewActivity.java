@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -99,7 +100,9 @@ public class TestScrollViewActivity extends BaseActivity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.activity_scrollview);
+        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.title_with_left_btn);
         mContext = getApplicationContext();
         bundle = this.getIntent().getExtras();
         fid = bundle.getString("fid");
@@ -146,6 +149,14 @@ public class TestScrollViewActivity extends BaseActivity implements View.OnClick
     }
 
     private void initView() {
+        ((TextView)findViewById(R.id.title_name)).setText(bundle.getString("fname"));
+        ((Button)findViewById(R.id.head_left_btn)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
+            }
+        });
         mContentText = (TextView) findViewById(R.id.film_content);
         mShowMore = (RelativeLayout) findViewById(R.id.show_more);
         mImageSpread = (ImageView) findViewById(R.id.more);
@@ -190,6 +201,9 @@ public class TestScrollViewActivity extends BaseActivity implements View.OnClick
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(TestScrollViewActivity.this,CommentActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("fname", tv_filmna.getText().toString());
+                intent.putExtras(bundle);
                 startActivity(intent);
                 overridePendingTransition(R.anim.in_from_top, R.anim.out_to_bottom);
             }

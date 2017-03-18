@@ -19,7 +19,7 @@ import com.lvyanhao.R;
  */
 
 public class CommentActivity extends Activity {
-
+    private TextView tv_filmname;
     private RatingBar mRatingBar = null;
     private TextView mRatingBarLevel = null;
     private TextView comment_rate = null;
@@ -36,6 +36,8 @@ public class CommentActivity extends Activity {
     private float ratingFinalValue = 0;
     private String content = "";
 
+    private Bundle bundle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +49,9 @@ public class CommentActivity extends Activity {
 
     private void init(){
         context = getApplicationContext();
+        bundle = this.getIntent().getExtras();
+        tv_filmname = (TextView) findViewById(R.id.comment_title);
+        tv_filmname.setText(bundle.getString("fname"));
         mRatingBar = (RatingBar)findViewById(R.id.ratingbar);//ÐÇ
         mRatingBarLevel = (TextView)findViewById(R.id.mRatingBarLevel);//ÐÇ¸öÊý
         comment_rate = (TextView)findViewById(R.id.comment_rate);//ÆÀ¼¶
