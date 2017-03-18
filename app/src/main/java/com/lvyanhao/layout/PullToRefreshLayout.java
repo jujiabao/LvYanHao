@@ -1,4 +1,4 @@
-package com.lvyanhao.pullableview;
+package com.lvyanhao.layout;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lvyanhao.R;
+import com.lvyanhao.pullableview.Pullable;
 
 import java.util.Timer;
 import java.util.TimerTask;

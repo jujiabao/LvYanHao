@@ -26,7 +26,7 @@ import com.lvyanhao.R;
 import com.lvyanhao.activity.TestScrollViewActivity;
 import com.lvyanhao.component.MyFilmInfoListViewAdapter;
 import com.lvyanhao.dto.ResultDto;
-import com.lvyanhao.pullableview.PullToRefreshLayout;
+import com.lvyanhao.layout.PullToRefreshLayout;
 import com.lvyanhao.utils.NetUtil;
 import com.lvyanhao.utils.SystemUtil;
 import com.lvyanhao.vo.FilmListLoadMoreReqVo;

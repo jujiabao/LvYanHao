@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.lvyanhao.pullableview.PullToRefreshLayout
+    <com.lvyanhao.layout.PullToRefreshLayout
         android:id="@+id/film_refresh_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -44,5 +44,5 @@
 
         <include layout="@layout/load_more" />
 
-    </com.lvyanhao.pullableview.PullToRefreshLayout>
+    </com.lvyanhao.layout.PullToRefreshLayout>
 </com.lvyanhao.layout.SwipeBackLayout>

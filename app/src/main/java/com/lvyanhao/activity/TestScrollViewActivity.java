@@ -1,14 +1,10 @@
 package com.lvyanhao.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,10 +21,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lvyanhao.R;
 import com.lvyanhao.component.MyFilmCommentViewAdapter;
-import com.lvyanhao.component.MyFilmInfoListViewAdapter;
 import com.lvyanhao.dto.ResultDto;
-import com.lvyanhao.layout.SwipeBackLayout;
-import com.lvyanhao.pullableview.PullToRefreshLayout;
+import com.lvyanhao.layout.PullToRefreshLayout;
 import com.lvyanhao.utils.NetUtil;
 import com.lvyanhao.utils.SystemUtil;
 import com.lvyanhao.vo.CommentListLoadMoreReqVo;
@@ -36,14 +30,10 @@ import com.lvyanhao.vo.CommentListLoadMoreRspVo;
 import com.lvyanhao.vo.CommentListRefreshReqVo;
 import com.lvyanhao.vo.FilmDetailReqVo;
 import com.lvyanhao.vo.FilmDetailRspVo;
-import com.lvyanhao.vo.FilmListLoadMoreReqVo;
-import com.lvyanhao.vo.FilmListLoadMoreRspVo;
-import com.lvyanhao.vo.FilmListRefreshReqVo;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
