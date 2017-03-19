@@ -3,6 +3,7 @@ package com.lvyanhao.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,6 +33,8 @@ import com.lvyanhao.vo.CommentListLoadMoreRspVo;
 import com.lvyanhao.vo.CommentListRefreshReqVo;
 import com.lvyanhao.vo.FilmDetailReqVo;
 import com.lvyanhao.vo.FilmDetailRspVo;
+import com.lvyanhao.vo.FilmWantReqVo;
+import com.lvyanhao.vo.FilmWantRspVo;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -94,6 +97,8 @@ public class TestScrollViewActivity extends BaseActivity implements View.OnClick
     private TextView tv_filmplaytime;
     private TextView tv_filmintro;
 
+    private FilmDetailRspVo rspVo = null;
+
     //评论按钮
     private Button btn_want;
     private Button btn_comment;
@@ -116,6 +121,7 @@ public class TestScrollViewActivity extends BaseActivity implements View.OnClick
         initView();
         initListView();
         comment();
+        want();
     }
 
     private void initListView()
@@ -204,9 +210,20 @@ public class TestScrollViewActivity extends BaseActivity implements View.OnClick
                 Intent intent = new Intent(TestScrollViewActivity.this,CommentActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("fname", tv_filmna.getText().toString());
+                bundle.putString("fid",rspVo.getFid());
                 intent.putExtras(bundle);
                 startActivity(intent);
                 overridePendingTransition(R.anim.in_from_top, R.anim.out_to_bottom);
+            }
+        });
+    }
+    //想看
+    public void want(){
+        btn_want.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MyWantAsyncTask myWantAsyncTask = new MyWantAsyncTask(mContext);
+                myWantAsyncTask.execute();
             }
         });
     }
@@ -293,7 +310,7 @@ public class TestScrollViewActivity extends BaseActivity implements View.OnClick
 
         //返回报文头部分
         private ResultDto resultDto = null;
-        private FilmDetailRspVo rspVo = null;
+
 
         public MyFilmDetailAsyncTask(Context context) {
             this.context = context;
@@ -372,6 +389,11 @@ public class TestScrollViewActivity extends BaseActivity implements View.OnClick
                     tv_filmtm.setText(rspVo.getFdura());
                     tv_filmplaytime.setText(rspVo.getFontm());
                     tv_filmintro.setText(rspVo.getFintro());
+
+                    if ("1".equals(rspVo.getFwant())){
+                        btn_want.setText("已收藏");
+                        btn_want.setTextColor(getResources().getColor(R.color.colorAccent));
+                    }
 
                     myPullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
                     break;
@@ -508,6 +530,117 @@ public class TestScrollViewActivity extends BaseActivity implements View.OnClick
                     Toast.makeText(context, resultDto.getMsg(), Toast.LENGTH_SHORT).show();
                     if (option_status == IS_LOADMORE)
                         myPullToRefreshLayout.refreshFinish(PullToRefreshLayout.FAIL);
+                    break;
+            }
+        }
+
+        @Override
+        protected void onCancelled(Void result) {
+            super.onCancelled(result);
+        }
+
+    };
+
+    /**
+     * 收藏服务器逻辑实现
+     */
+    private class MyWantAsyncTask extends AsyncTask<Void, Integer, Void> {
+        private ProgressDialog dialog = null;
+        private Context context;
+
+        //返回报文头部分
+        private ResultDto resultDto = null;
+        private FilmWantRspVo wantRspVo = null;
+
+
+
+        public MyWantAsyncTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @SuppressWarnings("WrongThread")
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            String token = SystemUtil.getTokenValueFromSP(context);
+            Log.d("lvyanhao-token", "取得SharedPreferences中的TOKEN值="+token);
+            int flag = 99999;
+            FilmWantReqVo reqVo = new FilmWantReqVo();
+            reqVo.setWfid(rspVo.getFid());
+            if ("1".equals(rspVo.getFwant())) {
+                //已收藏
+                reqVo.setWstatus("0");
+            } else {
+                //未收藏
+                reqVo.setWstatus("1");
+            }
+            //写json
+            Gson gson = new Gson();
+            Log.d("lvyanhao", "@ 拼包信息 FilmWantReqVo="+ reqVo);
+            Log.d("lvyanhao", "@ 发往服务器信息："+gson.toJson(reqVo));
+            String rsp = NetUtil.post(context, "/eval/film/want.do", gson.toJson(reqVo), token);
+            //返回报文具体操作
+            try {
+                resultDto = gson.fromJson(rsp, ResultDto.class);
+                Log.d("lvyanhao", "@ 拆包明细："+ resultDto.getStatus() + "，" + resultDto.getMsg());
+                //拆包返回的
+                Type t = new TypeToken<FilmWantRspVo>(){}.getType();
+                //转换报文体内容
+                String data = gson.toJson(resultDto.getData());
+                Log.d("lvyanhao", "@ 返回报文体：data="+data);
+                wantRspVo = gson.fromJson(data, t);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Log.d("lvyanhao", "@ 报文体明细："+rspVo);
+            if (resultDto == null) {
+                resultDto = new ResultDto();
+                resultDto.setStatus("-1");
+                resultDto.setMsg("系统未知错误！");
+                resultDto.setData(null);
+            }
+            flag = Integer.parseInt(resultDto.getStatus());
+            publishProgress(flag);
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            switch (values[0]) {
+                case 0:
+                    if ("1".equals(wantRspVo.getWstatus())) {
+                        if ("1".equals(wantRspVo.getWflag())) {
+                            //收藏操作成功
+                            Toast.makeText(context, "收藏成功！", Toast.LENGTH_SHORT).show();
+                            btn_want.setText("已收藏");
+                            btn_want.setTextColor(getResources().getColor(R.color.colorAccent));
+                            rspVo.setFwant("1");
+                        } else {
+                            Toast.makeText(context, "收藏失败！", Toast.LENGTH_SHORT).show();
+                        }
+                    } else if ("0".equals(wantRspVo.getWstatus())){
+                        if ("1".equals(wantRspVo.getWflag())){
+                            //取消收藏成功
+                            Toast.makeText(context, "取消成功！", Toast.LENGTH_SHORT).show();
+                            btn_want.setText("想看");
+                            btn_want.setTextColor(getResources().getColor(R.color.white));
+                            rspVo.setFwant("0");
+                        }
+                        else {
+                            Toast.makeText(context, "取消收藏失败！", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    break;
+                case 99999:
+                    Toast.makeText(context, "连接网络错误！", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Toast.makeText(context, resultDto.getMsg(), Toast.LENGTH_SHORT).show();
                     break;
             }
         }

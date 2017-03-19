@@ -37,6 +37,7 @@ public class CommentAgreeReqVo implements Serializable {
         this.cfid = cfid;
     }
 
+
     @Override
     public String toString() {
         return "CommentAgreeReqVo{" +

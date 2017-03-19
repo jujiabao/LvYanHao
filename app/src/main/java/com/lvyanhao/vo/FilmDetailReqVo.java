@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class FilmDetailReqVo implements Serializable {
     private String fid;
+    private String cid;
 
     public String getFid() {
         return fid;
@@ -16,10 +17,10 @@ public class FilmDetailReqVo implements Serializable {
         this.fid = fid;
     }
 
+
+
     @Override
     public String toString() {
-        return "FilmDetailReqVo{" +
-                "fid='" + fid + '\'' +
-                '}';
+        return "FilmDetailReqVo{" + "fid='" + fid + '\'' + '}';
     }
 }

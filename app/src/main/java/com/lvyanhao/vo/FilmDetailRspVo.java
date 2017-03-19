@@ -13,10 +13,19 @@ public class FilmDetailRspVo implements Serializable {
     private String farea;
     private String fdura;
     private String ftp;
-    private String fintro;//璇︾粏浠嬬粛
-    private String fontm;//涓婃槧鏃堕棿
+    private String fintro;//详细介绍
+    private String fontm;//上映时间
     private String fpicurl;
-    private String fcount;//璇勮浜烘暟
+    private String fcount;//评论人数
+    private String fwant;//是否已经收藏,1:收藏,2:未收藏
+
+    public String getFwant() {
+        return fwant;
+    }
+
+    public void setFwant(String fwant) {
+        this.fwant = fwant;
+    }
 
     public String getFdura() {
         return fdura;
@@ -120,6 +129,7 @@ public class FilmDetailRspVo implements Serializable {
                 ", fontm='" + fontm + '\'' +
                 ", fpicurl='" + fpicurl + '\'' +
                 ", fcount='" + fcount + '\'' +
+                ", fwant='" + fwant + '\'' +
                 '}';
     }
 }
