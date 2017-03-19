@@ -512,9 +512,9 @@ public class TestScrollViewActivity extends BaseActivity implements View.OnClick
                         listView.setSelection(listView.getCount() - (2*LIMIT_PAGE-1));
                     }
                     adapter.notifyDataSetChanged();
-                    SystemUtil.setListViewHeightBasedOnChildren(listView);
                     if (option_status == IS_LOADMORE)
                         myPullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+                    SystemUtil.setListViewHeightBasedOnChildren(mContext, listView);
                     break;
                 case 99999:
                     Toast.makeText(context, "Á¬½ÓÍøÂç´íÎó£¡", Toast.LENGTH_SHORT).show();

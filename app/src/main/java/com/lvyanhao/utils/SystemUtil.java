@@ -2,11 +2,17 @@ package com.lvyanhao.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SyncStatusObserver;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import com.lvyanhao.R;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +59,7 @@ public class SystemUtil {
         return tm.getSimCountryIso();
     }
 
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
+    public static void setListViewHeightBasedOnChildren(Context context, ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) {
             // pre-condition
@@ -61,10 +67,14 @@ public class SystemUtil {
         }
 
         int totalHeight = 0;
+        int listViewWidth = getScreenWidth(context) - dip2px(context, 10);
+        int widthSpec = View.MeasureSpec.makeMeasureSpec(listViewWidth, View.MeasureSpec.AT_MOST);
         for (int i = 0; i < listAdapter.getCount(); i++) {
             View listItem = listAdapter.getView(i, null, listView);
-            listItem.measure(0, 0);
+            listItem.measure(widthSpec, 0);
             totalHeight += listItem.getMeasuredHeight();
+            System.out.println("@li="+listItem.getMeasuredHeight());
+            System.out.println("@total="+totalHeight);
         }
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
@@ -86,5 +96,20 @@ public class SystemUtil {
         map.put("ip", ip);
         map.put("port",port);
         return map;
+    }
+
+    public static int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
+    public static int getScreenWidth(Context context){
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        return wm.getDefaultDisplay().getWidth();
+    }
+
+    public static int getScreenHeight(Context context){
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        return wm.getDefaultDisplay().getHeight();
     }
 }
