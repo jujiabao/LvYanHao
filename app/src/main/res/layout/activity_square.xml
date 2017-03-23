@@ -1,0 +1,47 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/tab_square"
+    android:visibility="gone"
+    tools:context=".activity.FragmentActivity">
+
+    <RelativeLayout
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/shape_rect_02" >
+
+        <TextView
+            android:id="@+id/tv_left"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:gravity="center"
+            android:text="最新" />
+
+        <TextView
+            android:id="@+id/tv_up"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/shape_rect_03"
+            android:gravity="center"
+            android:text="最新" />
+
+        <TextView
+            android:id="@+id/tv_right"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:gravity="center"
+            android:text="最热" />
+    </RelativeLayout>
+
+</RelativeLayout>
