@@ -15,7 +15,7 @@
     </style>
 
     <style name="WindowTitleBackground">
-        <item name="android:background">@color/low_red</item>
+        <item name="android:background">#f0333333</item>
     </style>
 
     <style name="fiveRatingBar_small" parent="@android:style/Widget.RatingBar">

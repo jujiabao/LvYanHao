@@ -7,7 +7,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.lvyanhao.R;
 import com.lvyanhao.fragment.HotFragment;
@@ -48,6 +50,8 @@ public class FragmentActivity extends Activity implements View.OnClickListener {
 
     private TextView tv_titlename;
 
+    private RelativeLayout tab_square;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +77,7 @@ public class FragmentActivity extends Activity implements View.OnClickListener {
         hotLayout.setOnClickListener(this);
         mineLayout.setOnClickListener(this);
         tv_titlename = (TextView) findViewById(R.id.title_name);
+        tab_square = (RelativeLayout)findViewById(R.id.tab_square);
     }
 
     @Override
@@ -103,7 +108,9 @@ public class FragmentActivity extends Activity implements View.OnClickListener {
             case 0:
                 // 当点击了首页tab时，改变控件的图片和文字颜色
                 tv_titlename.setText("热映/待映");
-                mainImage.setImageResource(R.drawable.fragmeng_main);
+                tv_titlename.setVisibility(View.VISIBLE);
+                tab_square.setVisibility(View.GONE);
+                mainImage.setImageResource(R.drawable.fragment_main);
                 mainText.setTextColor(Color.RED);
                 if (mainFragment == null) {
                     // 如果MessageFragment为空，则创建一个并添加到界面上
@@ -117,6 +124,8 @@ public class FragmentActivity extends Activity implements View.OnClickListener {
             case 1:
                 // 当点击了热点tab时，改变控件的图片和文字颜色
                 tv_titlename.setText("广场");
+                tv_titlename.setVisibility(View.GONE);
+                tab_square.setVisibility(View.VISIBLE);
                 hotImage.setImageResource(R.drawable.fragment_hot);
                 hotText.setTextColor(Color.RED);
                 if (hotFragment == null) {
@@ -131,6 +140,8 @@ public class FragmentActivity extends Activity implements View.OnClickListener {
             case 2:
                 // 当点击了个人tab时，改变控件的图片和文字颜色
                 tv_titlename.setText("我的");
+                tv_titlename.setVisibility(View.VISIBLE);
+                tab_square.setVisibility(View.GONE);
                 mineImage.setImageResource(R.drawable.fragment_mine);
                 mineText.setTextColor(Color.RED);
                 if (mineFragment == null) {
@@ -151,7 +162,7 @@ public class FragmentActivity extends Activity implements View.OnClickListener {
         mainText.setTextColor(Color.parseColor("#D0D0D0"));
         hotImage.setImageResource(R.drawable.unfragment_hot);
         hotText.setTextColor(Color.parseColor("#D0D0D0"));
-        mineImage.setImageResource(R.drawable.unfragemnt_mine);
+        mineImage.setImageResource(R.drawable.unfragment_mine);
         mineText.setTextColor(Color.parseColor("#D0D0D0"));
     }
     private void hideFragments(FragmentTransaction transaction) {

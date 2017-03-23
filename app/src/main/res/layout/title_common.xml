@@ -16,4 +16,6 @@
         android:singleLine="true"
          />
 
+    <include layout="@layout/activity_square"></include>
+
 </RelativeLayout>

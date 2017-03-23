@@ -13,5 +13,7 @@
     <color name="low_dark">#F6F6F6</color>
     <color name="divide_color">#ECECEC</color>
     <color name="whitesmoke">#F5F5F5</color>
+    <color name="more_blue">#00BFFF</color>
+    <color name="more_gray">#666666</color>
 
 </resources>
