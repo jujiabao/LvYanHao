@@ -1,6 +1,8 @@
 package com.lvyanhao.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SyncStatusObserver;
 import android.telephony.TelephonyManager;
@@ -13,9 +15,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.lvyanhao.R;
+import com.lvyanhao.activity.FilmInfoListViewActivity;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.TELEPHONY_SERVICE;
@@ -111,5 +116,47 @@ public class SystemUtil {
     public static int getScreenHeight(Context context){
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         return wm.getDefaultDisplay().getHeight();
+    }
+
+    public static void gotoActivity(final Context context, String activityName, int waiting) {
+        if (!(context instanceof Activity)) {
+            throw new RuntimeException("当前Context不是Activity，请在调用处以这样方式传参：context = SomeActivity.this;或直接SomeActivity.this");
+        }
+        try {
+            final Intent intent = new Intent();
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            intent.setClass(context, Class.forName(activityName));
+            Timer timerIntent = new Timer();
+            TimerTask timerTaskIntent = new TimerTask() {
+                @Override
+                public void run() {
+                    context.startActivity(intent);
+                    ((Activity)context).overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+                    ((Activity)context).finish();
+                }
+            };
+            timerIntent.schedule(timerTaskIntent, waiting);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void gotoActivity(final Context context, Class activityClass, int waiting) {
+        if (!(context instanceof Activity)) {
+            throw new RuntimeException("当前Context不是Activity，请在调用处以这样方式传参：context = SomeActivity.this;或直接SomeActivity.this");
+        }
+        final Intent intent = new Intent();
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        intent.setClass(context, activityClass);
+        Timer timerIntent = new Timer();
+        TimerTask timerTaskIntent = new TimerTask() {
+            @Override
+            public void run() {
+                context.startActivity(intent);
+                ((Activity)context).overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+                ((Activity)context).finish();
+            }
+        };
+        timerIntent.schedule(timerTaskIntent, waiting);
     }
 }
